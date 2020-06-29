@@ -13,6 +13,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
 
+// Configurar cabeceras y cors
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+  app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+    res.send();
+  });
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,10 +35,11 @@ app.use(i18n.init);
 
 app.locals.title = 'Caretaker';
 
-//const jwtAuth = require('./lib/jwtAuth');
+const jwtAuth = require('./lib/jwtAuth');
 
 //app.use('/api/anuncios', jwtAuth(), require('./routes/api/anuncios'));
 //app.use('/api/authenticate', require('./routes/authenticate'));
+app.use('/api/users', require('./router/api/users'));
 
 //app.use('/',      require('./routes/index'));
 //app.use('/change-locale', require('./routes/change-locale'));
