@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/www",
-    "dev": "cross-env DEBUG=nodeapi:* NODE_ENV=development nodemon"
+    "dev": "cross-env DEBUG=nodeapi:* NODE_ENV=development nodemon",
+    "install-db": "node install-db.js"
   },
   "author": "",
   "license": "ISC",

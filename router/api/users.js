@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const userSchema = require('../../models/users');
+const stateSchema = require('../../models/state');
 const jwt = require('jsonwebtoken');
 
 router.post('/', async (req, res, next) => {
@@ -26,7 +27,6 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-
 router.post('/logon', async (req, res, next) => {
   try {
 
@@ -49,6 +49,17 @@ router.post('/logon', async (req, res, next) => {
     res.json({token: token });
 
   } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/state', async (req, res, next) => {
+  try {
+
+    const docs = await stateSchema.stateList();
+    res.json(docs);
+
+  } catch(err) {
     next(err);
   }
 });

@@ -1,31 +1,57 @@
 'use strict';
 
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const ads = require('../../models/ads');
+//const cote = require('cote');
+const multer = require('multer');
+//const upload = multer({ dest: './public/images/ads/' });
 
-const anuncioSchema = mongoose.Schema({
-    name: String,
-    sell: Boolean,
-    price: Number,
-    photo: String,
-    thumb: String,
-    tags: [String]
+router.get('/', async (req, res, next) => {
+    try {
+        const name = req.query.name;
+        const price = req.query.price;
+        const sell = req.query.sell;
+        const where = req.query.where;
+        const limit = parseInt(req.query.limit || 10);
+        const start = parseInt(req.query.start || 0);
+        const sort = req.query.sort || '_id';
+
+        const filter = {};
+
+        if (typeof name !== 'undefined') {
+            filter.name = name;
+        }
+
+        if (typeof sell !== 'undefined') {
+            filter.sell = sell;
+        }
+
+        if (typeof where != 'undefined') {
+            filter.where = where;
+        }
+
+        if (typeof price !== 'undefined') {
+            const spacePrice = price.split('-');
+
+            if (spacePrice[1] === '') {
+                filter.price = {$gte: spacePrice[0]};
+            }
+            else if (spacePrice[0] === '') {
+                filter.price = {$lte: spacePrice[1]};
+            }
+            else if (spacePrice.length === 1) {
+                filter.price = spacePrice[0];
+            }
+            else {
+                filter.price = {$gte: spacePrice[0], $lte: spacePrice[1]};
+            }
+        }
+
+        const docs = await ads.list(filter, limit, start, sort);
+        res.json(docs);
+
+    } catch(err) {
+      next(err);
+    }
 });
-
-anuncioSchema.statics.list = function (filter, limit, start, sort) {
-    const query = Anuncio.find(filter);
-    query.limit(limit);
-    query.skip(start);
-    query.sort(sort)
-
-    return query.exec();
-}
-
-anuncioSchema.statics.tagList = function () {
-    const query = Anuncio.distinct('tags');
-   
-    return query.exec();
-}
-
-const Anuncio = mongoose.model('Anuncio', anuncioSchema);
-
-module.exports = Anuncio;

@@ -5,7 +5,6 @@ import { Navbar, Nav } from "react-bootstrap";
 import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 
-
 const StyledLink = styled(Link)`
     color: palevioletred;
 	font-size: 1.25em;

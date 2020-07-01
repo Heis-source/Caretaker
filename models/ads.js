@@ -5,15 +5,18 @@ const mongoose = require('mongoose');
 const adsSchema = mongoose.Schema({
     name: String,
     idUser: String,
+    where: String,
+    description: String,
     sell: Boolean,
     price: Number,
     photo: String,
     thumb: String,
-    tags: [String]
+    provincia: String,
+    createdAt: String
 });
 
 adsSchema.statics.list = function (filter, limit, start, sort) {
-    const query = Anuncio.find(filter);
+    const query = Ads.find(filter);
     query.limit(limit);
     query.skip(start);
     query.sort(sort)
@@ -21,12 +24,6 @@ adsSchema.statics.list = function (filter, limit, start, sort) {
     return query.exec();
 }
 
-adsSchema.statics.tagList = function () {
-    const query = Anuncio.distinct('tags');
-   
-    return query.exec();
-}
+const Ads = mongoose.model('Ads', adsSchema);
 
-const Anuncio = mongoose.model('Anuncio', anuncioSchema);
-
-module.exports = Anuncio;
+module.exports = Ads;
