@@ -37,8 +37,7 @@ app.locals.title = 'Caretaker';
 
 const jwtAuth = require('./lib/jwtAuth');
 
-//app.use('/api/anuncios', jwtAuth(), require('./routes/api/anuncios'));
-//app.use('/api/authenticate', require('./routes/authenticate'));
+app.use('/api/ads', require('./router/api/ads'));
 app.use('/api/users', require('./router/api/users'));
 
 //app.use('/',      require('./routes/index'));

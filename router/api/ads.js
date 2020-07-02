@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const ads = require('../../models/ads');
+const adsSchema = require('../../models/ads');
 //const cote = require('cote');
 const multer = require('multer');
 //const upload = multer({ dest: './public/images/ads/' });
@@ -48,10 +48,35 @@ router.get('/', async (req, res, next) => {
             }
         }
 
-        const docs = await ads.list(filter, limit, start, sort);
+        const docs = await adsSchema.list(filter, limit, start, sort);
         res.json(docs);
 
     } catch(err) {
       next(err);
     }
 });
+
+router.post('/', async (req, res, next) => {
+    try {
+
+     //req.body.photo = req.file.filename;
+     //req.body.thumb = req.body.photo;
+
+      const adsGetData = req.body;
+      const adsData = new adsSchema(adsGetData);
+
+      const adsSaveData = await adsData.save();
+      res.status(201).json({ result: adsSaveData });
+      
+      //const requester = new cote.Requester({ name: 'ThumbCrafter' });
+
+      //requester.send({
+      //  type: 'Resize IMG',
+      //  file: req.body.photo,
+
+    } catch (err) {
+      next(err);
+    }
+});
+
+module.exports = router;

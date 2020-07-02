@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-ro
 import { Navbar, Nav } from "react-bootstrap";
 import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
+import Ads from "../_jsx/ads/ads";
 
 const StyledLink = styled(Link)`
     color: palevioletred;
@@ -28,6 +29,7 @@ export default class Home extends Component {
                         <Nav>
                             <StyledLink to="/login">Register</StyledLink>
                             <StyledLink to="/logon">Sign in</StyledLink>
+                            <StyledLink to="/ads">Ads</StyledLink>
                             <Redirect from="/" to='/login' />
                         </Nav>
                     </Navbar.Collapse>
@@ -35,6 +37,7 @@ export default class Home extends Component {
                     <Switch>
                         <Route path="/login" component={Login} />
                         <Route path="/logon" component={Logon} />
+                        <Route path="/ads" component={Ads} />
                     </Switch>    
             </Router>
         );

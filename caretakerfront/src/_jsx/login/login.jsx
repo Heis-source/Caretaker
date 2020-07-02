@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Button, Form, Container, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import States from '../../routing/state'
+
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -57,11 +59,6 @@ export default class Login extends Component {
     }
 
     render() {
-
-        const stateList = this.state.stateArray
-        const renderStates = stateList.map((item, i) => 
-            <option key={item + i} value={item}>{item}</option>)
-
         return (
             <Container>
                 <Row>
@@ -84,7 +81,7 @@ export default class Login extends Component {
                         <Form.Group controlId="formBasicSelect">
                             <Form.Label>Select with three visible options</Form.Label>
                             <Form.Control as="select" name='state' onChange={this.inputChange} value={this.state.state}>
-                                {renderStates}
+                                <States />
                             </Form.Control>
                         </Form.Group>       
                         <Button variant="primary" type="submit">

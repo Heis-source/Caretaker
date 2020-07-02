@@ -12,6 +12,7 @@ const adsSchema = mongoose.Schema({
     photo: String,
     thumb: String,
     provincia: String,
+    updateAt: String,
     createdAt: String
 });
 
