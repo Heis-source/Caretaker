@@ -5,6 +5,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 import Ads from "../_jsx/ads/ads";
+import CreateAd from "../_jsx/ads/createAd"
 
 const StyledLink = styled(Link)`
     color: palevioletred;
@@ -18,7 +19,7 @@ const StyledLink = styled(Link)`
 `;
 
 export default class Home extends Component {
-    render(){
+    render() {
         return (
             <Router>
                 <Navbar className="menu" collapseOnSelect expand="lg">
@@ -27,10 +28,11 @@ export default class Home extends Component {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto"></Nav>
                         <Nav>
+                            <StyledLink to="/ads">Ads</StyledLink>
                             <StyledLink to="/login">Register</StyledLink>
                             <StyledLink to="/logon">Sign in</StyledLink>
-                            <StyledLink to="/ads">Ads</StyledLink>
-                            <Redirect from="/" to='/login' />
+                            <StyledLink to ="/account">My Account</StyledLink>                                
+                            <Redirect from="/" to='/ads' />
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
@@ -38,6 +40,7 @@ export default class Home extends Component {
                         <Route path="/login" component={Login} />
                         <Route path="/logon" component={Logon} />
                         <Route path="/ads" component={Ads} />
+                        <Route path="/createAd" component={CreateAd} />
                     </Switch>    
             </Router>
         );

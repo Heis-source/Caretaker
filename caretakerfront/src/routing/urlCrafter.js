@@ -1,18 +1,19 @@
-const makingURL = (name, sell, pricemin, pricemax, tag) => {
+const makingURL = (name, sell, pricemin, pricemax, state) => {
     let noPatchedURL = '';
 
     if (name.toString() !== '') {
         noPatchedURL += '&name='+name;
     } 
     if (sell.toString() !== '') {
-        noPatchedURL += '&venta='+sell;
+        noPatchedURL += '&sell='+sell;
     }
     if ((pricemin > 0) && (pricemax > 0)) {
         noPatchedURL += '&price='+pricemin+'-'+pricemax ;
     }
-    if (tag.toString() !== '') {
-        noPatchedURL += '&tag='+tag;
-    }
+    if (state.toString() !== '') {
+        noPatchedURL += '&state='+state;
+    } 
+
 return '?'+noPatchedURL.slice(1);
 }
 

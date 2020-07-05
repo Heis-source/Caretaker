@@ -3,9 +3,9 @@
 const express = require('express');
 const router = express.Router();
 const adsSchema = require('../../models/ads');
-//const cote = require('cote');
+const cote = require('cote');
 const multer = require('multer');
-//const upload = multer({ dest: './public/images/ads/' });
+const upload = multer({ dest: './public/images/ads/' });
 
 router.get('/', async (req, res, next) => {
     try {
@@ -56,25 +56,24 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('photo'), async (req, res, next) => {
     try {
 
-     //req.body.photo = req.file.filename;
-     //req.body.thumb = req.body.photo;
+        req.body.photo = req.file.filename;
+        req.body.thumb = req.body.photo;
 
-      const adsGetData = req.body;
-      const adsData = new adsSchema(adsGetData);
+        const adsGetData = req.body;
+        const adsData = new adsSchema(adsGetData);
 
-      const adsSaveData = await adsData.save();
-      res.status(201).json({ result: adsSaveData });
-      
-      //const requester = new cote.Requester({ name: 'ThumbCrafter' });
-
-      //requester.send({
-      //  type: 'Resize IMG',
-      //  file: req.body.photo,
-
-    } catch (err) {
+        const adsSaveData = await adsData.save();
+        res.status(201).json({ result: adsSaveData });
+        
+        const requester = new cote.Requester({ name: 'ThumbCrafter' });
+        requester.send({
+          type: 'Resize IMG',
+          file: req.body.photo,
+        })
+        } catch (err) {
       next(err);
     }
 });

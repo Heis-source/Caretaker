@@ -6,6 +6,7 @@ const userSchema = require('../../models/users');
 const stateSchema = require('../../models/state');
 const jwt = require('jsonwebtoken');
 
+
 router.post('/', async (req, res, next) => {
   try {
 
@@ -46,7 +47,7 @@ router.post('/logon', async (req, res, next) => {
       _id: User._id
     }, process.env.JWT_SECRET, {expiresIn: '2d'});
 
-    res.json({token: token });
+    res.json({ token: token });
 
   } catch (err) {
     next(err);

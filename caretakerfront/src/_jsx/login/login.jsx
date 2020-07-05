@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Button, Form, Container, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import States from '../../routing/state'
+import '../../_css/register.css';
 
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ export default class Login extends Component {
         this.state = {
             email: '',
             password: '',
+            username: '',
             biography: '',
             state: '',
             stateArray: [],
@@ -37,16 +38,17 @@ export default class Login extends Component {
         console.log(this.state.state)
     }
 
-    getRegister = (email, password, biography, state) => {
+    getRegister = (email, password, username, biography, state) => {
         axios.post('http://localhost:9000/api/users', {
             email,
             password,
+            username,
             biography,
             state,
         })
         .then(() => {
             alert("Todo ok!");
-            //this.props.history.push('/login');
+            this.props.history.push('/login');
         })
         .catch(error => {
             alert("Something is wrong! Try again!");
@@ -60,36 +62,39 @@ export default class Login extends Component {
 
     render() {
         return (
-            <Container>
-                <Row>
-                    <Form onSubmit={this.onSubmit}>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control name="email" type="email" placeholder="Email" onChange={this.inputChange} value={this.state.email} />
-                            <Form.Text className="text-muted">
-                            <Link to='/logon'>I have account. Redirect to LogOn page</Link>
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control name="password" type="password" placeholder="Password" onChange={this.inputChange} value={this.state.password} />
-                        </Form.Group>
-                        <Form.Group controlId="formBasicBiography">
-                            <Form.Label>Biography</Form.Label>
-                            <Form.Control name="biography" type="textarea" placeholder="Something about you..." onChange={this.inputChange} value={this.state.biography} />
-                        </Form.Group>
-                        <Form.Group controlId="formBasicSelect">
-                            <Form.Label>Select with three visible options</Form.Label>
-                            <Form.Control as="select" name='state' onChange={this.inputChange} value={this.state.state}>
-                                <States />
-                            </Form.Control>
-                        </Form.Group>       
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Row>
-            </Container>    
+            <div className='form-container rounded mx-auto d-block'>
+                <div className="card border-dark mb-3 border-card">
+                    <div className="card-header">Creating a new user</div>
+                    <div className="card-body text-dark">
+                        <form onSubmit={this.onSubmit}>
+                            <div class="form-group">
+                                <label htmlFor="email">Email address</label>
+                                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" onChange={this.inputChange} value={this.state.email}/>
+                                <Link to="/login"><small id="emailHelp" class="form-text text-muted">i dont remember</small></Link>
+                            </div>
+                            <div class="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" onChange={this.inputChange} value={this.state.password} />
+                            </div>
+                            <div class="form-group">
+                                <label htmlFor="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" onChange={this.inputChange} value={this.state.username} />
+                            </div>
+                            <div class="form-group">
+                                <label htmlFor="biography">Biography</label>
+                                <input type="text" class="form-control" id="biography" name="biography" onChange={this.inputChange} value={this.state.biography} />
+                            </div>
+                            <div class="form-group">
+                                <label htmlFor="state">State</label>
+                                <select class="form-control" id="state" name="state" onChange={this.inputChange} value={this.state.state}>
+                                    <States />
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div> 
+            </div>
         );
     }
 }
