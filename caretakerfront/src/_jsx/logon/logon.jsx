@@ -30,7 +30,7 @@ export default class Logon extends Component {
             this.props.history.push('/ads');
             localStorage.setItem('token', response.data.token)
             const now = new Date().getTime();
-            localStorage.getItem('setupTime', now);
+            localStorage.setItem('setupTime', now);
         })
         .catch(() => {
             this.props.history.push('/login');

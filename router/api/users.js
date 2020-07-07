@@ -28,6 +28,26 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.post('/session', async (req, res, next) => {
+  try {
+
+    const token = req.body.token;
+    const User = await userSchema.findOne({ token: token });
+
+    if (!User || token !== User.token) {
+      const error = new Error('You have to logon again');
+      error.status = 401;
+      next(error);
+      return;
+    }
+
+    res.status(201).json({ result: User });
+
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/logon', async (req, res, next) => {
   try {
 

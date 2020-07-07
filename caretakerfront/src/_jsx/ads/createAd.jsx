@@ -15,7 +15,7 @@ export default class createAd extends Component {
             price: '',
             photo: '',
             provincia: 'Albacete',
-            createdAt: new Date(),
+            createdAt: new Date()
         };
     }
 
@@ -29,13 +29,13 @@ export default class createAd extends Component {
         fd.append('price', price);
         fd.append('photo', photo);
         fd.append('provincia', provincia);
+        fd.append('updateAt', createdAt);
         fd.append('createdAt', createdAt);
         console.log(fd);
         axios({
             method: 'POST',
             url: 'http://localhost:9000/api/ads',
             data: fd,
-            headers: {'Content-Type': 'multipart/form-data' }
         })
         .then(() => {
             console.log("OK")
@@ -48,9 +48,8 @@ export default class createAd extends Component {
     onSubmit = (evt) => {
         evt.preventDefault();
         const imgaux = document.getElementById('photo').files[0];
-        this.setState({ photo: imgaux });
-        this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt);
-        console.log(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt)
+       //this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt);
+        console.log(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt)
     }
 
     onChangeInput = (evt) => {
@@ -96,7 +95,7 @@ export default class createAd extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="photo">Photo</label>
-                    <input type="file" name='photo' className="form-control-file" id="photo" onChange={this.onChangeInput} />
+                    <input type="file" name='photo' className="form-control-file" id="photo" />
                 </div>
                 <button type="submit" className="btn btn-primary">Create</button>
             </form>

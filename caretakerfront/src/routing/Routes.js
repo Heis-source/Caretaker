@@ -6,6 +6,7 @@ import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 import Ads from "../_jsx/ads/ads";
 import CreateAd from "../_jsx/ads/createAd"
+import Profile from "../_jsx/profile/profile"
 
 const StyledLink = styled(Link)`
     color: palevioletred;
@@ -34,7 +35,7 @@ export default class Home extends Component {
                             <StyledLink to="/ads">Ads</StyledLink>
                             <StyledLink to="/login">Register</StyledLink>
                             <StyledLink to="/logon">Sign in</StyledLink>
-                            <StyledLink to ="/account">My Account</StyledLink>                                
+                            <StyledLink to ="/profile">My Account</StyledLink>                                
                             <Redirect from="/" to='/ads' />
                         </Nav>
                     </Navbar.Collapse>
@@ -44,6 +45,7 @@ export default class Home extends Component {
                         <Route path="/logon" component={Logon} />
                         <Route path="/ads" component={Ads} />
                         <Route path="/createAd" component={CreateAd} />
+                        <Route path="/profile" component={Profile} />
                     </Switch>    
             </Router>
         );
