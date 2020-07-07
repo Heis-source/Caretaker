@@ -18,12 +18,15 @@ const StyledLink = styled(Link)`
     }
 `;
 
+localStorage.getItem('token');
+
+
 export default class Home extends Component {
     render() {
         return (
             <Router>
                 <Navbar className="menu" collapseOnSelect expand="lg">
-                    <StyledLink to="/">KeepAds</StyledLink>
+                    <StyledLink to="/">Caretaker</StyledLink>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto"></Nav>

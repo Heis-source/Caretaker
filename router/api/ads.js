@@ -73,6 +73,7 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
           type: 'Resize IMG',
           file: req.body.photo,
         })
+        
         } catch (err) {
       next(err);
     }

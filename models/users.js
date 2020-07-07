@@ -8,6 +8,7 @@ const usersSchema = mongoose.Schema({
   username: String,
   biography: String,
   state: String,
+  token: String,
 });
 
 const Users = mongoose.model('Users', usersSchema);

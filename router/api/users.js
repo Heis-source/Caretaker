@@ -48,6 +48,7 @@ router.post('/logon', async (req, res, next) => {
     }, process.env.JWT_SECRET, {expiresIn: '2d'});
 
     res.json({ token: token });
+    const userUpdate = await userSchema.updateOne({ email: email }, { $set: { token: token } } )
 
   } catch (err) {
     next(err);
