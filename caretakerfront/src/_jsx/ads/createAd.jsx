@@ -48,8 +48,7 @@ export default class createAd extends Component {
     onSubmit = (evt) => {
         evt.preventDefault();
         const imgaux = document.getElementById('photo').files[0];
-       //this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt);
-        console.log(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt)
+        this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt);
     }
 
     onChangeInput = (evt) => {
@@ -60,45 +59,47 @@ export default class createAd extends Component {
 
     render() {
         return(
-            <form onSubmit={this.onSubmit} encType="multipart/form-data">
-                <div className="form-group">
-                    <label htmlFor="name">Title</label>
-                    <input type="text" className="form-control" id="name" name="name" onChange={this.onChangeInput} value={this.state.name} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <input type="text" className="form-control" id="description" name="description" onChange={this.onChangeInput} value={this.state.description} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="price">Price</label>
-                    <input type="number" className="form-control" id="price" name="price" onChange={this.onChangeInput} value={this.state.price} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="where">Where</label>
-                    <select onChange={this.onChangeInput} value={this.state.where} name="where" id="where" className="custom-select mr-sm-2">
-                        <option value="true">YourHouse</option>
-                        <option value="false">MyHouse</option>
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="sell">What do you need?</label>
-                    <select onChange={this.onChangeInput} value={this.state.sell} name="sell" id="sell" className="custom-select mr-sm-2">
-                        <option value="true">Needed</option>
-                        <option value="false">Offer</option>
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="state">State</label>
-                    <select onChange={this.onChangeInput} value={this.state.provincia} name="provincia" id="state" className="custom-select mr-sm-2">
-                        <States />
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="photo">Photo</label>
-                    <input type="file" name='photo' className="form-control-file" id="photo" />
-                </div>
-                <button type="submit" className="btn btn-primary">Create</button>
-            </form>
+            <div className="container">
+                <form onSubmit={this.onSubmit} encType="multipart/form-data">
+                    <div className="form-group">
+                        <label htmlFor="name">Title</label>
+                        <input type="text" className="form-control" id="name" name="name" onChange={this.onChangeInput} value={this.state.name} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <input type="text" className="form-control" id="description" name="description" onChange={this.onChangeInput} value={this.state.description} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="price">Price</label>
+                        <input type="number" className="form-control" id="price" name="price" onChange={this.onChangeInput} value={this.state.price} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="where">Where</label>
+                        <select onChange={this.onChangeInput} value={this.state.where} name="where" id="where" className="custom-select mr-sm-2">
+                            <option value="true">YourHouse</option>
+                            <option value="false">MyHouse</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="sell">What do you need?</label>
+                        <select onChange={this.onChangeInput} value={this.state.sell} name="sell" id="sell" className="custom-select mr-sm-2">
+                            <option value="true">Needed</option>
+                            <option value="false">Offer</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="state">State</label>
+                        <select onChange={this.onChangeInput} value={this.state.provincia} name="provincia" id="state" className="custom-select mr-sm-2">
+                            <States />
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="photo">Photo</label>
+                        <input type="file" name='photo' className="form-control-file" id="photo" />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Create</button>
+                </form>
+            </div>
         )
     }
 }

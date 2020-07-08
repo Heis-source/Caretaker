@@ -31,7 +31,6 @@ export default class Profile extends Component {
     
     onSubmit = (evt) => {
         evt.preventDefault();
-
     }
 
     onChangeInput = (evt) => {
@@ -43,37 +42,58 @@ export default class Profile extends Component {
     render() {
         return (
             <div className="container">
-                <div className="card-header">Welcome {this.state.user.username}</div>
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="exampleFormControlFile1">Example file input</label>
-                        <input type="file" className="form-control-file" />
+                <div className="card text-white bg-danger mb-2">
+                    <div className="card-header text-center mb-3">
+                        Welcome {this.state.user.username}
                     </div>
-                    <div className="form-group row">
-                        <label htmlFor="email" className="col-sm-2 col-form-label">Email</label>
-                        <div className="col-sm-10">
-                            <input type="text" readOnly className="form-control-plaintext" id="email" name="email" value={this.state.user.email} />
+                    <form>
+                        <div className="form-group offset-md-2 col-md-8">
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text" id="photo">Avatar</span>
+                                </div>
+                                <div className="custom-file">
+                                    <input type="file" className="custom-file-input" id="photo" name="photo" />
+                                    <label className="custom-file-label" htfor="inputGroupFile01">Choose file</label>
+                                </div>
+                            </div>
                         </div>
-                        <label htmlFor="password" className="col-sm-2 col-form-label">Password</label>
-                        <div className="col-sm-10">
-                            <input type="password" name="password" id="password" />
+                        <div className="form-group offset-md-2 col-md-8">
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text" >Email</span>
+                                </div>
+                            <input type="email" readOnly className="form-control" id="email" name="email" value={this.state.user.email} />
+                            </div>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">Username</span>
+                                </div>
+                            <input type="text" className="form-control" id="username" name="username" value={this.state.user.username} />
+                            </div>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">Password</span>
+                                </div>
+                            <input type="password" className="form-control" id="password" name="password" />
+                            </div>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">Biography</span>
+                                </div>
+                                <textarea className="form-control" aria-label="With textarea" value={this.state.user.biography}></textarea>
+                            </div>
+                            <div className="input-group mb-3">
+                                <div className="input-group-prepend">
+                                    <label className="input-group-text" htmlFor="inputGroupSelect01">State</label>
+                                </div>
+                                <select className="custom-select" id="states" name="states">
+                                    <States />
+                                </select>                            
+                            </div>
                         </div>
-                        <label htmlFor="biography" className="col-sm-2">Biography</label>
-                        <div className="col-sm-10">
-                            <textarea type="text" name="biography" id="biography" value={this.state.user.biography} />
-                        </div>
-                        <label htmlFor="staticEmail" className="col-sm-2 col-form-label">Username</label>
-                        <div className="col-sm-10">
-                            <input type="text" name="username" id="username"/>
-                        </div>
-                        <label htmlFor="state" className="col-sm-2 col-form-label">State</label>
-                        <div className="col-sm-10">
-                            <select name='state' value={this.state.user.state} className="custom-select mr-sm-2">
-                                <States />
-                            </select>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         )
     }

@@ -5,7 +5,7 @@ const router = express.Router();
 const adsSchema = require('../../models/ads');
 const cote = require('cote');
 const multer = require('multer');
-const upload = multer({ dest: './public/images/ads/' });
+const upload = multer({ dest: './public/img/ads/' });
 
 router.get('/', async (req, res, next) => {
     try {
@@ -68,7 +68,7 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
         const adsSaveData = await adsData.save();
         res.status(201).json({ result: adsSaveData });
         
-        const requester = new cote.Requester({ name: 'ThumbCrafter' });
+        const requester = new cote.Requester({ name: 'ThumbCrafterAds' });
         requester.send({
           type: 'Resize IMG',
           file: req.body.photo,

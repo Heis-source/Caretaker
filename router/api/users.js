@@ -5,9 +5,12 @@ const router = express.Router();
 const userSchema = require('../../models/users');
 const stateSchema = require('../../models/state');
 const jwt = require('jsonwebtoken');
+const cote = require('cote');
+const multer = require('multer');
+const upload = multer({ dest: './public/img/ads' });
 
 
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
 
     const userGetData = req.body;
@@ -16,12 +19,12 @@ router.post('/', async (req, res, next) => {
     const userCreated = await userSaveData.save();
     res.status(201).json({ result: userCreated });
     
-    /*const requester = new cote.Requester({ name: 'ThumbCrafter' });
+    const requester = new cote.Requester({ name: 'ThumbCrafterProfile' });
 
     requester.send({
       type: 'Resize IMG',
       file: req.body.photo,
-    });*/
+    });
 
   } catch (err) {
     next(err);

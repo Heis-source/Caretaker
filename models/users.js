@@ -8,6 +8,8 @@ const usersSchema = mongoose.Schema({
   username: String,
   biography: String,
   state: String,
+  photo: String,
+  thumb: String,
   token: String,
 });
 
