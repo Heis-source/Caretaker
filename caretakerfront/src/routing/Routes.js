@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 import Ads from "../_jsx/ads/ads";
 import CreateAd from "../_jsx/ads/createAd"
 import Profile from "../_jsx/profile/profile"
+import RememberPassword from "../_jsx/recovery/rememberPassword"
+import ResetPassword from "../_jsx/recovery/resetPassword"
 
 const StyledLink = styled(Link)`
     color: palevioletred;
@@ -32,20 +34,21 @@ export default class Home extends Component {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto"></Nav>
                         <Nav>
-                            <StyledLink to="/ads">Ads</StyledLink>
+                            <StyledLink to="/">Ads</StyledLink>
                             <StyledLink to="/login">Register</StyledLink>
                             <StyledLink to="/logon">Sign in</StyledLink>
-                            <StyledLink to ="/profile">My Account</StyledLink>                                
-                            <Redirect from="/" to='/ads' />
+                            <StyledLink to ="/profile">My Account</StyledLink>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                     <Switch>
                         <Route path="/login" component={Login} />
                         <Route path="/logon" component={Logon} />
-                        <Route path="/ads" component={Ads} />
                         <Route path="/createAd" component={CreateAd} />
+                        <Route path="/rememberPassword" component={RememberPassword} />
                         <Route path="/profile" component={Profile} />
+                        <Route path="/reset/:token" component={ResetPassword} />
+                        <Route path="/" component={Ads} />
                     </Switch>    
             </Router>
         );

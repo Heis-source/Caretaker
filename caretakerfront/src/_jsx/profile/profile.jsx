@@ -39,12 +39,16 @@ export default class Profile extends Component {
         this.setState({ [inputName]: inputValue});
     }
 
+    changeRenders = (evt) => {
+        evt.preventDefault();
+    }
+
     render() {
         return (
             <div className="container">
-                <div className="card text-white bg-danger mb-2">
-                    <div className="card-header text-center mb-3">
-                        Welcome {this.state.user.username}
+                <div className="card border-dark mb-2">
+                    <div className="card-header text-right mb-3">
+                        <button type="button" className="btn btn-link">Edit</button>
                     </div>
                     <form>
                         <div className="form-group offset-md-2 col-md-8">

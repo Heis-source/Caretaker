@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import States from '../../routing/state'
-import { Link } from "react-router-dom";
 import axios from 'axios';
 
 export default class createAd extends Component {
@@ -48,7 +47,7 @@ export default class createAd extends Component {
     onSubmit = (evt) => {
         evt.preventDefault();
         const imgaux = document.getElementById('photo').files[0];
-        this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, this.state.photo, this.state.provincia, this.state.createdAt);
+        this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt);
     }
 
     onChangeInput = (evt) => {

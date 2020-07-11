@@ -11,6 +11,8 @@ const usersSchema = mongoose.Schema({
   photo: String,
   thumb: String,
   token: String,
+  resetPasswordToken: String,
+  resetPasswordExpire: String,
 });
 
 const Users = mongoose.model('Users', usersSchema);
