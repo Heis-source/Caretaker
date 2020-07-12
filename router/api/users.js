@@ -13,7 +13,6 @@ const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 
-
 router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
 
@@ -21,8 +20,18 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
     const userSaveData = new userSchema(userGetData);
 
     const userCreated = await userSaveData.save();
-    res.status(201).json({ result: userCreated });
     
+    if (userCreated) {
+      res.status(201).json({ 
+        result: userCreated,
+        msgFromServer: 'user created',
+      })
+    } else {
+      res.status(400).json({ 
+        msgFromServer: 'generic error',
+      })
+    }
+        
     const requester = new cote.Requester({ name: 'ThumbCrafterProfile' });
 
     requester.send({
@@ -140,18 +149,25 @@ router.post('/passwordForgot', async (req, res, next) => {
   }
 });
 
-router.get('/reset', async (req, res, next) => {
+router.get('/reset', (req, res, next) => {
   try {
 
-    const token = req.body.resetPasswordToken;
+    const token = req.query.resetPasswordToken;
 
-    const User = await userSchema.findOne({ 
-      where: { 
-        resetPasswordToken: token,
+    const User = userSchema.findOne({ resetPasswordToken: token,
         resetPasswordExpire: { 
           $gt: Date.now(),
-        },
       },
+    }).then(user => {
+      if (user == null) {
+        res.json('password reset link invalid or has expired')
+      } else {
+        console.log(user.email)
+        res.status(200).send({
+          email: user.email,
+          message: 'password reset link a-ok',
+        })
+      }
     })
 
   } catch(err) {
@@ -168,19 +184,18 @@ router.post('/updatePassword', async (req, res, next) => {
     const User = await userSchema.findOne({ email: email })
 
     if (User) {
-      userSchema.updateOne({ email: email }, { $set: { password: password, resetPasswordToken: null, resetPasswordExpire: null }
-    })
-    .then(() => {
-      res.status(200).send({ message: 'password updated' });
-    })
+        userSchema.updateOne({ email: email }, { $set: { password: password, resetPasswordToken: null, resetPasswordExpire: null }
+      })
+      .then(() => {
+        res.status(200).send({ message: 'password updated' });
+      })
     } else {
-      res.status(404).json('no user exists in db to update');
+      res.status(404).send({ message: 'no user exists in db to update' });
     }
     
   } catch(err) {
     next(err);
   }
 });
-
 
 module.exports = router;

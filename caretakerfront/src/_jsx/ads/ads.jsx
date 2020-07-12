@@ -41,27 +41,28 @@ export default class Ads extends Component {
     render() {
         const { data } = this.state;
         const renderAds = data.map((d) =>
-        <div className="card mb-5" key={d._id}>
-            <div className="row no-gutters">
-                <div className="col-md-4">
-                    <img src={d.photo} className="card-img" alt={d.name} />
-                </div>
-                <div className="col-md-8">
-                    <div className="card-body">
-                        <h5 className="card-title">{d.name}</h5>
-                        <p className="card-text">{d.description}</p>
-                        <p className="card-text">Price: <span>{d.price}</span></p>
-                        <p className="card-text">Tags: <span>{d.tags}</span></p>
-                        <p className="card-text">Type: <span>{d.type}</span></p>
-                    </div>
-                    <div className="col-auto my-1">
-                        <Link to={`/details/${d._id}`}><button className="btn btn-primary">I want to see more</button></Link>
-                        <Link to={`/edit/${d._id}`}><button className="btn btn-warning">Edit</button></Link>
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <a href="#">
+                        <img class="card-img-top" src="http://placehold.it/700x400" alt="" />
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="">{d.name}</a>
+                        </h4>
+                        <p class="card-text">{d.description}</p>
+                        {d.sell === false && (
+                            <p class="card-text">Offering</p>
+                        )}
+                        {d.sell === true && (
+                            <p class="card-text">Wanted</p>
+                        )}
+                        <p class="card-text"><em>Price: {d.price} €</em></p>
+                        <p class="card-text"><bold>State: </bold>{d.provincia}</p>
                     </div>
                 </div>
             </div>
-        </div>
-        );
+        )
         return (
             <div className="container">
                 <div className='container-sm rounded mx-auto d-block'>
@@ -114,7 +115,32 @@ export default class Ads extends Component {
                     <p>Take care of others' pets when they can't or let them help you!</p>
                     <Link to="/createAd"><button className="btn btn-success">Create Ad</button></Link>
                 </div>
-                {renderAds}
+                <div class="row">
+                    {renderAds}
+                </div>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul> 
             </div>
         );
     }

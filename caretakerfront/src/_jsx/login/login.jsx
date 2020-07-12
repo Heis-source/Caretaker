@@ -16,6 +16,7 @@ export default class Login extends Component {
             photo: '',
             state: '',
             stateArray: [],
+            msgFromServer: '',
         };    
     }
 
@@ -51,12 +52,15 @@ export default class Login extends Component {
             url: 'http://localhost:9000/api/users',
             data: fd,
         })
-        .then(() => {
-            this.props.history.push('/login');
-            alert("Todo ok!");
+        .then(response => {
+            this.setState({
+                msgFromServer: response.data.msgFromServer,
+            })
         })
         .catch(error => {
-            alert("Something is wrong! Try again!");
+            this.setState({
+                msgFromServer: 'generic error',
+            })
         })
     }
 
@@ -69,6 +73,16 @@ export default class Login extends Component {
     render() {
         return (
             <div className='form-container rounded mx-auto d-block'>
+                {this.state.msgFromServer === 'user created' && (
+                    <div className="alert alert-success" role="alert">
+                        Account created, use the following link to <Link to='/logon'>log in</Link>
+                    </div>
+                )}
+                {this.state.msgFromServer === 'generic error' && (
+                    <div className="alert alert-danger" role="alert">
+                        Something is wrong! Try again or contact with Caretaker admin!
+                    </div>
+                )}
                 <div className="card border-dark mb-3 border-card">
                     <div className="card-header">Creating a new user</div>
                     <div className="card-body text-dark">
@@ -77,30 +91,30 @@ export default class Login extends Component {
                                 <label htmlFor="photo">Avatar</label>
                                 <input type="file" className="form-control-file" id="photo" name="photo" />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label htmlFor="email">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" onChange={this.inputChange} value={this.state.email}/>
-                                <Link to="/login"><small id="emailHelp" class="form-text text-muted">I dont remember my own password!</small></Link>
+                                <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp" onChange={this.inputChange} value={this.state.email}/>
+                                <Link to="/login"><small id="emailHelp" className="form-text text-muted">I dont remember my own password!</small></Link>
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" onChange={this.inputChange} value={this.state.password} />
+                                <input type="password" className="form-control" id="password" name="password" onChange={this.inputChange} value={this.state.password} />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label htmlFor="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" onChange={this.inputChange} value={this.state.username} />
+                                <input type="text" className="form-control" id="username" name="username" onChange={this.inputChange} value={this.state.username} />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label htmlFor="biography">Biography</label>
-                                <input type="text" class="form-control" id="biography" name="biography" onChange={this.inputChange} value={this.state.biography} />
+                                <input type="text" className="form-control" id="biography" name="biography" onChange={this.inputChange} value={this.state.biography} />
                             </div>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label htmlFor="state">State</label>
-                                <select class="form-control" id="state" name="state" onChange={this.inputChange} value={this.state.state}>
+                                <select className="form-control" id="state" name="state" onChange={this.inputChange} value={this.state.state}>
                                     <States />
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" className="btn btn-primary">Sign Up</button>
                         </form>
                     </div>
                 </div> 

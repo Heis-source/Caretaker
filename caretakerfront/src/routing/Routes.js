@@ -21,36 +21,62 @@ const StyledLink = styled(Link)`
     }
 `;
 
-localStorage.getItem('token');
-
-
 export default class Home extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            user: [],
+            loggedIn: true,
+        };
+    }
+
+    componentDidMount() {
+        const now = new Date().getTime();
+        const token = localStorage.getItem('token');
+
+        if (now-token > 24*60*60*1000) {
+            localStorage.clear()
+        } else {
+            axios.post('http://localhost:9000/api/users/session' , {
+                token
+            })
+            .then(response => {
+                const user = response.data.result;
+                this.setState({ loggedIn: true });               
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({ loggedIn: false }); 
+            })
+        }
+    }
+
     render() {
         return (
-            <Router>
+            <Router>       
                 <Navbar className="menu" collapseOnSelect expand="lg">
                     <StyledLink to="/">Caretaker</StyledLink>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mr-auto"></Nav>
-                        <Nav>
-                            <StyledLink to="/">Ads</StyledLink>
-                            <StyledLink to="/login">Register</StyledLink>
-                            <StyledLink to="/logon">Sign in</StyledLink>
-                            <StyledLink to ="/profile">My Account</StyledLink>
-                        </Nav>
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="mr-auto"></Nav>
+                            <Nav>
+                                <StyledLink to="/">Ads</StyledLink>
+                                <StyledLink to="/login">Register</StyledLink>
+                                <StyledLink to="/logon">Sign in</StyledLink>
+                                <StyledLink to ="/profile">My Account</StyledLink>
+                            </Nav>
                     </Navbar.Collapse>
                 </Navbar>
-                    <Switch>
-                        <Route path="/login" component={Login} />
-                        <Route path="/logon" component={Logon} />
-                        <Route path="/createAd" component={CreateAd} />
-                        <Route path="/rememberPassword" component={RememberPassword} />
-                        <Route path="/profile" component={Profile} />
-                        <Route path="/reset/:token" component={ResetPassword} />
-                        <Route path="/" component={Ads} />
-                    </Switch>    
+                <Switch>
+                    <Route path="/login" component={Login} />
+                    <Route path="/logon" component={Logon} />
+                    <Route path="/createAd" component={CreateAd} />
+                    <Route path="/rememberPassword" component={RememberPassword} />
+                    <Route path="/profile" component={Profile} />
+                    <Route path="/reset/:token" component={ResetPassword} />
+                    <Route path="/" component={Ads} />
+                </Switch>    
             </Router>
         );
-    }
-}
+    };
+ }

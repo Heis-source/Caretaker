@@ -48,6 +48,11 @@ export default class RememberPasswords extends Component {
     render() {
         return (
             <div className='form-container rounded mx-auto d-block'>
+                {this.state.msgFromServer === 'Email was send' && (
+                    <div className="alert alert-success" role="alert">
+                        Password recovery was sent to {this.state.email}. Please check your inbox.
+                    </div>
+                )}
                 <div className="card border-dark mb-3 border-card">
                     <div className="card-header">Recover your password</div>
                     <div className="card-body text-dark">

@@ -79,4 +79,19 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
     }
 });
 
+router.post('/getads', async (req, res, next) => {
+    try {
+  
+        const username = req.body.username;
+        const User = await adsSchema.find({ username: username });
+  
+        if (User) {
+            res.status(201).json({ result: User })
+        }
+  
+    } catch (err) {
+        next(err);
+    }
+  });
+
 module.exports = router;

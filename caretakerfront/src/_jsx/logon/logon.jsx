@@ -52,7 +52,7 @@ export default class Logon extends Component {
                             <div className="form-group">
                                 <label htmlFor="email">Email Address</label>
                                 <input type="text" className="form-control" id="email" name="email" onChange={this.inputChange} value={this.state.email} />
-                                <Link to='/login'><small>I dont have account, go to register.</small></Link>
+                                <Link to='/login'><small>I dont have account, go to register.</small></Link><br />
                                 <Link to='/rememberPassword'><small>I dont remember my password</small></Link>
                             </div>
                             <div className="form-group">
