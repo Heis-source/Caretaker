@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
         const price = req.query.price;
         const sell = req.query.sell;
         const where = req.query.where;
-        const limit = parseInt(req.query.limit || 10);
+        const limit = parseInt(req.query.limit);
         const start = parseInt(req.query.start || 0);
         const sort = req.query.sort || '_id';
 
@@ -92,6 +92,23 @@ router.post('/getads', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-  });
+});
+
+router.get('/:id', async (req, res, next) => {
+    try {
+        const _id = req.params.id;
+
+        const ad = await adsSchema.findOne({ _id });
+        if (!ad) {
+            const err = new Error('not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.json({ result: ad });
+
+    } catch (err) {
+        next(err);
+    }
+});
 
 module.exports = router;

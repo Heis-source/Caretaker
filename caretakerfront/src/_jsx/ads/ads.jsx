@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import makingURL from '../../routing/urlCrafter';
 import States from '../../routing/state'
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import axios from 'axios'
 
 export default class Ads extends Component {
     constructor(props) {
@@ -14,6 +14,7 @@ export default class Ads extends Component {
             pricemin: 0,
             pricemax: 0,
             state: '',
+            limit: '',
         };
     }
 
@@ -22,6 +23,7 @@ export default class Ads extends Component {
         .then(response => {
             const data = response.data;
             this.setState({ data });
+            this.setState({ limit: data.length });
         })
     }
     
@@ -41,25 +43,26 @@ export default class Ads extends Component {
     render() {
         const { data } = this.state;
         const renderAds = data.map((d) =>
-            <div class="col-lg-4 col-sm-6 mb-4">
-                <div class="card h-100">
+            <div className="col-lg-4 col-sm-6 mb-4" key={d._id}>
+                <div className="card h-100">
                     <a href="#">
-                        <img class="card-img-top" src="http://placehold.it/700x400" alt="" />
+                        <img className="card-img-top" src="http://placehold.it/700x400" alt="" />
                     </a>
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="">{d.name}</a>
+                    <div className="card-body">
+                        <h4 className="card-title">
+                            <a href="#">{d.name}</a>
                         </h4>
-                        <p class="card-text">{d.description}</p>
+                        <p className="card-text">{d.description}</p>
                         {d.sell === false && (
-                            <p class="card-text">Offering</p>
+                            <p className="card-text">Offering</p>
                         )}
                         {d.sell === true && (
-                            <p class="card-text">Wanted</p>
+                            <p className="card-text">Wanted</p>
                         )}
-                        <p class="card-text"><em>Price: {d.price} €</em></p>
-                        <p class="card-text"><bold>State: </bold>{d.provincia}</p>
+                        <p className="card-text"><em>Price: {d.price} €</em></p>
+                        <p className="card-text">State: {d.provincia}</p>
                     </div>
+                    <Link to={`/details/${d._id}`}><button className="btn btn-primary">I want to see more</button></Link>
                 </div>
             </div>
         )
@@ -115,29 +118,29 @@ export default class Ads extends Component {
                     <p>Take care of others' pets when they can't or let them help you!</p>
                     <Link to="/createAd"><button className="btn btn-success">Create Ad</button></Link>
                 </div>
-                <div class="row">
+                <div className="row">
                     {renderAds}
                 </div>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
+                    <ul className="pagination justify-content-center">
+                        <li className="page-item">
+                            <a className="page-link" href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
+                                <span className="sr-only">Previous</span>
                             </a>
                         </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">1</a>
+                        <li className="page-item">
+                            <a className="page-link" href="#">1</a>
                         </li>
-                        <li class="page-item">
-                                <a class="page-link" href="#">2</a>
+                        <li className="page-item">
+                            <a className="page-link" href="#">2</a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
+                        <li className="page-item">
+                            <a className="page-link" href="#">3</a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+                        <li className="page-item">
+                            <a className="page-link" href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
+                                <span className="sr-only">Next</span>
                             </a>
                         </li>
                     </ul> 

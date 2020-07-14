@@ -6,9 +6,12 @@ import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 import Ads from "../_jsx/ads/ads";
 import CreateAd from "../_jsx/ads/createAd"
+import Details from "../_jsx/ads/details"
 import Profile from "../_jsx/profile/profile"
 import RememberPassword from "../_jsx/recovery/rememberPassword"
 import ResetPassword from "../_jsx/recovery/resetPassword"
+import axios from 'axios';
+
 
 const StyledLink = styled(Link)`
     color: palevioletred;
@@ -42,7 +45,9 @@ export default class Home extends Component {
             })
             .then(response => {
                 const user = response.data.result;
-                this.setState({ loggedIn: true });               
+                if (!user) {
+                    this.setState({ loggedIn: true });               
+                }
             })
             .catch(error => {
                 console.log(error);
@@ -74,6 +79,7 @@ export default class Home extends Component {
                     <Route path="/rememberPassword" component={RememberPassword} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/reset/:token" component={ResetPassword} />
+                    <Route path="/details/:id" component={Details} />
                     <Route path="/" component={Ads} />
                 </Switch>    
             </Router>

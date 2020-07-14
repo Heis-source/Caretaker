@@ -198,4 +198,25 @@ router.post('/updatePassword', async (req, res, next) => {
   }
 });
 
+router.post('/usernameAds', async (req, res, next) => {
+  try {
+
+    const username = req.body.username;
+    const User = await userSchema.findOne({ username: username });
+
+    if (!User) {
+      const error = new Error('You have to logon again');
+      error.status = 401;
+      next(error);
+      return;
+    }
+
+    res.status(201).json({ result: User });
+
+  } catch (err) {
+    next(err);
+  }
+
+});
+
 module.exports = router;
