@@ -39,6 +39,7 @@ const jwtAuth = require('./lib/jwtAuth');
 
 app.use('/api/ads', require('./router/api/ads'));
 app.use('/api/users', require('./router/api/users'));
+app.use('/api/comment', require('./router/api/comment'));
 
 //app.use('/',      require('./routes/index'));
 //app.use('/change-locale', require('./routes/change-locale'));

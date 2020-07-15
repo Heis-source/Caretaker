@@ -27,8 +27,8 @@ export default class Logon extends Component {
             password,
         })
         .then(response => {
-            this.props.history.push('/ads');
-            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('token', response.data.User.token)
+            localStorage.setItem('username', response.data.User.username)
             const now = new Date().getTime();
             localStorage.setItem('setupTime', now);
         })

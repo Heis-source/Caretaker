@@ -8,7 +8,11 @@ export default class Details extends Component {
         super(props)
         this.state = {
             data: [],
+            ads: [],
             user: [],
+            msgFromServerData: '',
+            msgFromServerAds: '',
+            msgFromServerUser: '',
         }
     }
 
@@ -17,15 +21,12 @@ export default class Details extends Component {
     }   
     
     search = (id) => {
-        // eslint-disable-next-line no-undef
         axios.get('http://localhost:9000/api/ads/' + id)
         .then(response => {
             const data = response.data.result;
             this.setState({ data });
             this.searchUserInfo(this.state.data.username)
-        })
-        .catch(error => {
-
+            this.searchAdsInfo(this.state.data.username)
         })
     }
 
@@ -39,87 +40,87 @@ export default class Details extends Component {
                this.setState({ user });
             }
         })
+    }
+
+    searchAdsInfo = (username) => {
+        axios.get('http://localhost:9000/api/ads/?username='+ username +'&limit=4')
+        .then(response => {
+            const ads = response.data;
+            if (ads) {
+               this.setState({ ads, msgFromServerAds: 'no ads found' });
+            }
+        })
         .catch(error => {
-            
+            this.setState({
+                msgFromServerAds: 'no ads found',
+            })
         })
     }
 
     render() {
-        console.log(this.state);
+        const { ads } = this.state;
+        const renderAds = ads.map((d) =>
+        <div className="col-md-3 col-sm-6 mb-4" key={d._id} >
+            <Link to={`/details/${d._id}`}>
+                <img className="img-fluid" src="http://placehold.it/500x300" alt="" />
+                <small>{d.name}</small>
+            </Link>
+        </div>
+        )
         return (
             <div className="container">
+                <h1 className="my-4">{this.state.data.name}
+                    <small> by: <Link to={`/profile/${this.state.user.username}`}>{this.state.user.username}</Link></small>
+                </h1>
                 <div className="row">
-                    <div className="col-lg-5 col-md-6">
-                        <div className="mb-2">
-                            <img className="w-100" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" />
-                        </div>
-                        <div className="mb-2 d-flex">
-                        <h4 className="font-weight-normal"><Link to={`/details/${this.state.user.username}`}>{this.state.user.username}</Link></h4>
-                        <div className="social d-flex ml-auto">
-                            <p className="pr-2 font-weight-normal">Share: </p>
-                            <a href="#" className="text-muted mr-1">
-                            <i className="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" className="text-muted mr-1">
-                            <i className="fab fa-twitter"></i>
-                            </a>
-                        </div>
-                        </div>
-                        <div className="mb-2">
-                            <ul className="list-unstyled">
-                                <li className="media">
-                                    <span className="w-25 text-black font-weight-normal">What:</span>
-                                    <label className="media-body">{this.state.data.name}</label>
-                                </li>
-                                <li className="media">
-                                    <span className="w-25 text-black font-weight-normal">Need or Offer?: </span>
-                                    {this.state.data.sell === true && (
-                                        <label className="media-body">Wanted</label>
-                                    )}
-                                    {this.state.data.sell === false &&  (
-                                        <label className="media-body">Offering</label>
-                                    )}
-                                </li>
-                                <li className="media">
-                                    <span className="w-25 text-black font-weight-normal">Donde: </span>
-                                    <label className="media-body">{this.state.data.where}</label>
-                                </li>
-                                <li className="media">
-                                    <span className="w-25 text-black font-weight-normal">Price: </span>
-                                    <label className="media-body">{this.state.data.price} $/hour</label>
-                                </li>
-                                <li className="media">
-                                    <span className="w-25 text-black font-weight-normal">Location: </span>
-                                    <label className="media-body">{this.state.data.provincia}</label>
-                                </li>
-                            </ul>
-                        </div>
+                    <div className="col-md-8">
+                        <img className="img-fluid" src="http://placehold.it/750x500" alt="" />
                     </div>
-                    <div className="col-lg-7 col-md-6 pl-xl-3">
-                        <h5 className="font-weight-normal">Description</h5>
-                        <p>Along with your plans, you should consider developing an action orientation that will keep you motivated to move forward at all times. This requires a little self-discipline, but is a crucial component to achievement of any kind. Before starting any new activity, ask yourself if that activity will move you closer to your goals. If the answer is no, you may want to reconsider doing it at that time.</p>
-                        <div className="my-2 bg-light p-2">
-                            <p className="font-italic mb-0">The price is something not necessarily defined as financial. It could be time, effort, sacrifice, money or perhaps, something else.</p>
-                        </div>
-                        <ul className="list list-unstyled mb-3">
-                            <li className="text-secondary font-weight-normal mb-1">
-                                <span className="ti-arrow-right pr-1 text-primary"></span>
-                                Commitment is something that comes from understanding that!
-                            </li>
-                            <li className="text-secondary font-weight-normal mb-1">
-                                <span className="ti-arrow-right pr-1 text-primary"></span>
-                                Its price and then having the willingness to pay that price.
-                            </li>
-                            <li className="text-secondary font-weight-normal mb-1">
-                                <span className="ti-arrow-right pr-1 text-primary"></span>
-                                Out after the fact that the price was too high.
-                            </li>
-                            <li className="text-secondary font-weight-normal mb-1">
-                                <span className="ti-arrow-right pr-1 text-primary"></span>
-                                This is important because nobody wants to put significant.
-                            </li>
+                    <div className="col-md-4">
+                        <h3 className="my-3">Description</h3>
+                            <p>{this.state.data.description}</p>
+                        <h3 className="my-3">Some details</h3>
+                        <ul>
+                            {this.state.data.where === true && (
+                                <li>In your House</li>
+                            )}
+                            {this.state.data.where === false && (
+                                <li>In my House</li>
+                            )}
+                            {this.state.data.sell === true && (
+                                <li>Offering</li>
+                            )}
+                            {this.state.data.sell === false && (
+                                <li>Wanted</li>
+                            )}
+                            <li>{this.state.data.provincia}</li>
+                            <li>{this.state.data.price} $/hour</li>
                         </ul>
                     </div>
+                </div>
+                <h5 className="my-3">Review</h5>
+                <div className="list-group">
+                    <a href="#" className="list-group-item list-group-item-action">
+                        <div className="d-flex w-100 justify-content-between">
+                            <h5 className="mb-1">List group item heading</h5>
+                            <small>3 days ago</small>
+                        </div>
+                        <p className="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                        <small>Donec id elit non mi porta.</small>
+                    </a>
+                    {localStorage.getItem("username") && (
+                    <form onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="exampleFormControlTextarea1"></label>
+                            <textarea className="form-control" placeholder='Send some review' id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <button type="submit" className="btn btn-primary">Send review</button>
+                    </form>
+                    )}                                        
+                </div>
+                <h3 className="my-4">Related Ads</h3>
+                <div className="row">
+                    {renderAds}
                 </div>
             </div>
         )
