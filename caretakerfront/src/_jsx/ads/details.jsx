@@ -10,9 +10,13 @@ export default class Details extends Component {
             data: [],
             ads: [],
             user: [],
+            comment: [],
             msgFromServerData: '',
             msgFromServerAds: '',
             msgFromServerUser: '',
+            userForComments: '',
+            comment: '',
+            ad_Id: '',
         }
     }
 
@@ -27,6 +31,19 @@ export default class Details extends Component {
             this.setState({ data });
             this.searchUserInfo(this.state.data.username)
             this.searchAdsInfo(this.state.data.username)
+            this.whoIam();
+        })
+    }
+
+    whoIam = () => {
+        const token = localStorage.getItem('token');
+        axios.post('http://localhost:9000/api/users/session' , {
+            token
+        })
+        .then(response => {
+            const comment = response.data.result;
+            this.setState({ comment })
+            
         })
     }
 
@@ -49,11 +66,46 @@ export default class Details extends Component {
             if (ads) {
                this.setState({ ads, msgFromServerAds: 'no ads found' });
             }
+
+            axios.get('http://localhost:9000/api/comment/search?ad_Id=' + this.state.data.ad_Id + "&limit=4")
+            .then(response => {
+                console.log(response.data)
+            })
+
         })
         .catch(error => {
             this.setState({
                 msgFromServerAds: 'no ads found',
             })
+        })
+    }
+
+    searchUserInfo = (username) => {
+        axios.post('http://localhost:9000/api/users/usernameAds' , {
+            username
+        })
+        .then(response => {
+            const user = response.data.result;
+            if (user) {
+               this.setState({ user });
+            }
+        })
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:9000/api/comment/add' , {
+            username: this.state.userForComments,
+            comment: this.state.comment,
+            ad_Id: this.state.data._id,
+        })
+    }
+
+    inputChange = (evt) => {
+        const name = evt.target.name;
+        const value = evt.target.value;
+        this.setState({
+            [name]: value
         })
     }
 
@@ -108,15 +160,13 @@ export default class Details extends Component {
                         <p className="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
                         <small>Donec id elit non mi porta.</small>
                     </a>
-                    {localStorage.getItem("username") && (
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <label htmlFor="exampleFormControlTextarea1"></label>
-                            <textarea className="form-control" placeholder='Send some review' id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <label htmlFor="comment"></label>
+                            <textarea className="form-control" placeholder='Send some review' id="comment" name="comment" rows="3" onChange={this.inputChange}></textarea>
                         </div>
                         <button type="submit" className="btn btn-primary">Send review</button>
-                    </form>
-                    )}                                        
+                    </form>                                     
                 </div>
                 <h3 className="my-4">Related Ads</h3>
                 <div className="row">

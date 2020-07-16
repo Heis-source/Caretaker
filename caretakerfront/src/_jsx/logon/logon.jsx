@@ -21,14 +21,13 @@ export default class Logon extends Component {
     }
 
     logOn = (email, password) => {
-        // eslint-disable-next-line no-undef
         axios.post('http://localhost:9000/api/users/logon' , {
             email,
             password,
         })
         .then(response => {
-            localStorage.setItem('token', response.data.User.token)
-            localStorage.setItem('username', response.data.User.username)
+            this.props.history.push('/ads');
+            localStorage.setItem('token', response.data.token)
             const now = new Date().getTime();
             localStorage.setItem('setupTime', now);
         })

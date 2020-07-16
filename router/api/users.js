@@ -49,7 +49,7 @@ router.post('/session', async (req, res, next) => {
 
     const token = req.body.token;
     const User = await userSchema.findOne({ token: token });
-
+    
     if (!User || token !== User.token) {
       const error = new Error('You have to logon again');
       error.status = 401;
@@ -70,7 +70,7 @@ router.post('/logon', async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    const User = await userSchema.findOne({ email: email });
+    let User = await userSchema.findOne({ email: email });
 
     if (!User || password !== User.password) {
       const error = new Error('invalid credentials');
@@ -83,8 +83,8 @@ router.post('/logon', async (req, res, next) => {
       _id: User._id
     }, process.env.JWT_SECRET, {expiresIn: '2d'});
 
-    res.json({ User });
-    const userUpdate = await userSchema.updateOne({ email: email }, { $set: { token: token } })
+    User = await userSchema.updateOne({ email: email }, { $set: { token: token } })
+    res.json({ User, token });
 
   } catch (err) {
     next(err);

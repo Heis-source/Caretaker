@@ -9,6 +9,15 @@ const commentSchema = mongoose.Schema({
   createdAt: String,
 });
 
+commentSchema.statics.list = function (filter, limit, sort) {
+  const query = Comment.find(filter);
+  query.limit(limit);
+  query.sort(sort)
+
+  console.log(query)
+  return query.exec();
+}
+
 const Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = Comment;
