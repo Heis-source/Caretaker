@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import makingURL from '../../routing/urlCrafter';
 import States from '../../routing/state'
+import '../../_css/ads.css';
 import { Link } from "react-router-dom";
 import axios from 'axios'
 
@@ -15,7 +16,13 @@ export default class Ads extends Component {
             pricemax: 0,
             state: '',
             limit: '',
+            loggedIn: false,
         };
+    }
+
+    componentDidMount = () => {
+        const token = localStorage.getItem('token');
+        this.logOn(token);
     }
 
     search = () => {
@@ -24,6 +31,19 @@ export default class Ads extends Component {
             const data = response.data;
             this.setState({ data });
             this.setState({ limit: data.length });
+        })
+    }
+
+    logOn = (token) => {
+        axios.post('http://localhost:9000/api/users/session' , {
+            token
+        })
+        .then(response => {
+            const user = response.data.result;
+            this.setState({ loggedIn: true });
+        })
+        .catch(() => {
+            this.setState({ loggedIn: false });
         })
     }
     
@@ -43,32 +63,41 @@ export default class Ads extends Component {
     render() {
         const { data } = this.state;
         const renderAds = data.map((d) =>
-            <div className="col-lg-4 col-sm-6 mb-4" key={d._id}>
-                <div className="card h-100">
-                    <a href="#">
-                        <img className="card-img-top" src="http://placehold.it/700x400" alt="" />
-                    </a>
-                    <div className="card-body">
-                        <h4 className="card-title">
-                            <a href="#">{d.name}</a>
-                        </h4>
-                        <p className="card-text">{d.description}</p>
-                        {d.sell === false && (
-                            <p className="card-text">Offering</p>
-                        )}
-                        {d.sell === true && (
-                            <p className="card-text">Wanted</p>
-                        )}
-                        <p className="card-text"><em>Price: {d.price} €</em></p>
-                        <p className="card-text">State: {d.provincia}</p>
+            <div className="product mx-auto" key={d._id}>
+                <div className="img-container">
+                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?dpr=1&auto=compress,format&fit=crop&w=1400&h=&q=80&cs=tinysrgb&crop=" />
+                </div>
+                <div className="product-info">
+                    <div className="product-content">
+                        <h1>{d.name}</h1>
+                        <p>{d.description}</p>
+                        <ul>
+                            {d.where === true && (
+                                <li>In your house</li>
+                            )}
+                            {d.where === false && (
+                                <li>In my house</li>
+                            )}
+                            {d.sell === true && (
+                                <li>Wanted</li>
+                            )}
+                            {d.sell === false && (
+                                <li>Offering</li>
+                            )}
+                            <li>Location: {d.provincia}</li>
+                        </ul>
+                        <div className="buttons">
+                            <Link to={`details/${d._id}`} className="button buy">See more</Link>
+                            <Link to={`buy/${d._id}`} className="button add">Book this!</Link>
+                            <span className="button" id="price">{d.price} €/hour</span>
+                        </div>
                     </div>
-                    <Link to={`/details/${d._id}`}><button className="btn btn-primary">I want to see more</button></Link>
                 </div>
             </div>
         )
         return (
             <div className="container">
-                <div className='container-sm rounded mx-auto d-block'>
+                <div className='rounded mx-auto d-block'>
                     <div className="card bg-light mb-3 styled-card" >
                         <div className="card-header">Filters! Filters!</div>
                         <div className="card-body">
@@ -104,46 +133,42 @@ export default class Ads extends Component {
                                         <option value='false'>Offer</option>
                                     </select>
                                 </div>
-                                <div className="col-auto my-1">
+                                <div>
                                     <button type="submit" className="btn btn-primary button-send">Filter</button>
-                                    <Link to={`/login`}><button className="btn btn-danger">Go back</button></Link>
+                                    {this.state.loggedIn === true && (
+                                        <Link to={`/createAd`} className="btn btn-success">Create Ad</Link>
+                                    )}
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div className="jumbotron">
-                    <h1 className="display-6">Create your own advertisement!</h1>
-                    <hr className="my-6" />
-                    <p>Take care of others' pets when they can't or let them help you!</p>
-                    <Link to="/createAd"><button className="btn btn-success">Create Ad</button></Link>
-                </div>
-                <div className="row">
-                    {renderAds}
-                </div>
-                    <ul className="pagination justify-content-center">
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span className="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#">1</a>
-                        </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#">2</a>
-                        </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#">3</a>
-                        </li>
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span className="sr-only">Next</span>
-                            </a>
-                        </li>
-                    </ul> 
+                
+                {renderAds}
+                
+                <ul className="pagination justify-content-center">
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">1</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">2</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">3</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span className="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul> 
             </div>
         );
     }

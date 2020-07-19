@@ -10,11 +10,11 @@ const commentSchema = mongoose.Schema({
 });
 
 commentSchema.statics.list = function (filter, limit, sort) {
+  console.log(filter)
   const query = Comment.find(filter);
   query.limit(limit);
   query.sort(sort)
 
-  console.log(query)
   return query.exec();
 }
 

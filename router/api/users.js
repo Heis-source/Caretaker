@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const userSchema = require('../../models/users');
 const stateSchema = require('../../models/state');
+const adsSchema = require('../../models/ads');
 const jwt = require('jsonwebtoken');
 const cote = require('cote');
 const multer = require('multer');
@@ -42,7 +43,7 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+})
 
 router.post('/session', async (req, res, next) => {
   try {
@@ -62,7 +63,7 @@ router.post('/session', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+})
 
 router.post('/logon', async (req, res, next) => {
   try {
@@ -89,7 +90,7 @@ router.post('/logon', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+})
 
 router.get('/state', async (req, res, next) => {
   try {
@@ -100,7 +101,7 @@ router.get('/state', async (req, res, next) => {
   } catch(err) {
     next(err);
   }
-});
+})
 
 router.post('/passwordForgot', async (req, res, next) => {
   try {
@@ -147,7 +148,7 @@ router.post('/passwordForgot', async (req, res, next) => {
   } catch(err) {
     next(err);
   }
-});
+})
 
 router.get('/reset', (req, res, next) => {
   try {
@@ -173,7 +174,7 @@ router.get('/reset', (req, res, next) => {
   } catch(err) {
     next(err);
   }
-});
+})
 
 router.post('/updatePassword', async (req, res, next) => {
   try {
@@ -196,7 +197,7 @@ router.post('/updatePassword', async (req, res, next) => {
   } catch(err) {
     next(err);
   }
-});
+})
 
 router.post('/usernameAds', async (req, res, next) => {
   try {
@@ -216,7 +217,25 @@ router.post('/usernameAds', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
 
+router.post('/deleteuser', async (req, res, next) => {
+  try {
+
+    const username = req.body.username;
+    
+    const User = await userSchema.deleteOne({ username: username });
+    const Ads = await adsSchema.deleteMany({ username: username });
+
+    if (User || Ads) {
+      res.status(201).send({ msgFromServer: 'all data deleted' });
+    } else {
+      res.status(403).send({ msgFromServer: 'delete error' });
+    }    
+
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

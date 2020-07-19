@@ -8,7 +8,8 @@ export default class Logon extends Component {
         super(props)
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            msgFromServer: '',
         };    
     }
 

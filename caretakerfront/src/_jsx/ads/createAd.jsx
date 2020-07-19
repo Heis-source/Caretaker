@@ -1,21 +1,42 @@
 import React, { Component } from "react";
 import States from '../../routing/state'
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
 export default class createAd extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            user: [],
             name: '',
-            username: 'Heiser',
             where: true,
             description: '',
             sell: true,
             price: '',
             photo: '',
             provincia: 'Albacete',
-            createdAt: new Date()
+            createdAt: new Date(),
+            msgFromServer: '',
         };
+    }
+
+    componentDidMount = () => {
+        const token = localStorage.getItem('token');
+        this.logOn(token);
+    }
+
+    logOn = (token) => {
+        axios.post('http://localhost:9000/api/users/session' , {
+            token
+        })
+        .then(response => {
+            const user = response.data.result;
+            this.setState({ user });
+            console.log(response.data)
+        })
+        .catch(() => {
+            this.props.history.push('/ads');
+        })
     }
 
     adsSaveData = (name, username, where, description, sell, price, photo, provincia, createdAt) => {
@@ -30,24 +51,25 @@ export default class createAd extends Component {
         fd.append('provincia', provincia);
         fd.append('updateAt', createdAt);
         fd.append('createdAt', createdAt);
-        console.log(fd);
         axios({
             method: 'POST',
             url: 'http://localhost:9000/api/ads',
             data: fd,
         })
-        .then(() => {
-            console.log("OK")
+        .then(respone => {
+            const msgFromServer = respone.data.msgFromServer
+            this.setState({ msgFromServer })
         })
-        .catch(error => {
-            console.log(error.message);
+        .catch(() => {
+            this.setState({ msgFromServer: 'ad error' })
         })
     }
     
     onSubmit = (evt) => {
         evt.preventDefault();
         const imgaux = document.getElementById('photo').files[0];
-        this.adsSaveData(this.state.name, this.state.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt);
+        console.log(this.state.user.username)
+        this.adsSaveData(this.state.name, this.state.user.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt);
     }
 
     onChangeInput = (evt) => {
@@ -59,6 +81,16 @@ export default class createAd extends Component {
     render() {
         return(
             <div className="container">
+                {this.state.msgFromServer === 'ad created' && (
+                    <div className="alert alert-success" role="alert">
+                        Ad created, create more or use the following link to <Link to='/ads'>go ads</Link>
+                    </div>
+                )}
+                {this.state.msgFromServer === 'ad error' && (
+                    <div className="alert alert-danger" role="alert">
+                        Something is wrong! Try again or contact with Caretaker admin!
+                    </div>
+                )}
                 <form onSubmit={this.onSubmit} encType="multipart/form-data">
                     <div className="form-group">
                         <label htmlFor="name">Title</label>

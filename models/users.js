@@ -13,6 +13,8 @@ const usersSchema = mongoose.Schema({
   token: String,
   resetPasswordToken: String,
   resetPasswordExpire: String,
+  showemail: Boolean,
+  rating: String,
 });
 
 const Users = mongoose.model('Users', usersSchema);

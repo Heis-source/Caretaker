@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from 'axios'
-import '../../_css/ads.css';
 import { Link } from "react-router-dom";
 
 export default class Details extends Component {
@@ -15,13 +14,14 @@ export default class Details extends Component {
             msgFromServerAds: '',
             msgFromServerUser: '',
             userForComments: '',
-            comment: '',
+            addingComment: '',
             ad_Id: '',
         }
     }
 
     componentDidMount = () => {
         this.search(this.props.match.params.id);
+        this.setState({ ad_Id: this.props.match.params.id });
     }   
     
     search = (id) => {
@@ -32,6 +32,15 @@ export default class Details extends Component {
             this.searchUserInfo(this.state.data.username)
             this.searchAdsInfo(this.state.data.username)
             this.whoIam();
+            this.loadCommnets();
+        })
+    }
+    
+    loadCommnets = () => {
+        axios.get('http://localhost:9000/api/comment/search?ad_Id=' + this.state.ad_Id + "&limit=4")
+        .then(response => {
+            const comment = response.data.result;
+            this.setState({ comment });
         })
     }
 
@@ -41,9 +50,8 @@ export default class Details extends Component {
             token
         })
         .then(response => {
-            const comment = response.data.result;
-            this.setState({ comment })
-            
+            const userForComments = response.data.result.username;
+            this.setState({ userForComments })
         })
     }
 
@@ -66,12 +74,6 @@ export default class Details extends Component {
             if (ads) {
                this.setState({ ads, msgFromServerAds: 'no ads found' });
             }
-
-            axios.get('http://localhost:9000/api/comment/search?ad_Id=' + this.state.data.ad_Id + "&limit=4")
-            .then(response => {
-                console.log(response.data)
-            })
-
         })
         .catch(error => {
             this.setState({
@@ -96,9 +98,10 @@ export default class Details extends Component {
         e.preventDefault();
         axios.post('http://localhost:9000/api/comment/add' , {
             username: this.state.userForComments,
-            comment: this.state.comment,
+            comment: this.state.addingComment,
             ad_Id: this.state.data._id,
         })
+        document.getElementById('addingComment').value = '';
     }
 
     inputChange = (evt) => {
@@ -118,6 +121,18 @@ export default class Details extends Component {
                 <small>{d.name}</small>
             </Link>
         </div>
+        )
+        const { comment } = this.state;
+        const renderComments = comment.map((c) => 
+        <Link to={`/profile/${c.username}`} key={c._id}>
+            <div href="1" className="list-group-item list-group-item-action">
+                <div className="d-flex w-100 justify-content-between">
+                    <h6 className="mb-1">{c.username}</h6>
+                    <small>{c.createdAt}</small>
+                </div>
+                <p className="mb-1">{c.comment}</p>
+            </div>
+        </Link>
         )
         return (
             <div className="container">
@@ -152,21 +167,21 @@ export default class Details extends Component {
                 </div>
                 <h5 className="my-3">Review</h5>
                 <div className="list-group">
-                    <a href="#" className="list-group-item list-group-item-action">
-                        <div className="d-flex w-100 justify-content-between">
-                            <h5 className="mb-1">List group item heading</h5>
-                            <small>3 days ago</small>
-                        </div>
-                        <p className="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                        <small>Donec id elit non mi porta.</small>
-                    </a>
+                    {comment.length === 0 && (
+                        <a href="1" className="list-group-item list-group-item-action">
+                            <div className="d-flex w-100 justify-content-between">
+                                <h6 className="mb-1 text-center">We dont have any review to show</h6>
+                            </div>
+                        </a>
+                    )}
+                    {renderComments}
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <label htmlFor="comment"></label>
-                            <textarea className="form-control" placeholder='Send some review' id="comment" name="comment" rows="3" onChange={this.inputChange}></textarea>
+                            <label htmlFor="addingComment"></label>
+                            <textarea className="form-control" placeholder='Send some review' id="addingComment" name="addingComment" rows="3" onChange={this.inputChange}></textarea>
                         </div>
                         <button type="submit" className="btn btn-primary">Send review</button>
-                    </form>                                     
+                    </form>
                 </div>
                 <h3 className="my-4">Related Ads</h3>
                 <div className="row">

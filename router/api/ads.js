@@ -54,7 +54,7 @@ router.get('/', async (req, res, next) => {
     } catch(err) {
       next(err);
     }
-});
+})
 
 router.post('/', upload.single('photo'), async (req, res, next) => {
     try {
@@ -66,7 +66,12 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
         const adsData = new adsSchema(adsGetData);
 
         const adsSaveData = await adsData.save();
-        res.status(201).json({ result: adsSaveData });
+
+        if (adsSaveData) {
+            res.status(201).send({ msgFromServer: 'ad created' });
+        } else {
+            res.status(403).send({ msgFromServer: 'ad error' });
+        }
         
         const requester = new cote.Requester({ name: 'ThumbCrafterAds' });
         requester.send({
@@ -75,9 +80,9 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
         })
         
         } catch (err) {
-      next(err);
+            next(err);
     }
-});
+})
 
 router.post('/getads', async (req, res, next) => {
     try {
@@ -92,7 +97,7 @@ router.post('/getads', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-});
+})
 
 router.get('/:id', async (req, res, next) => {
     try {
@@ -109,6 +114,6 @@ router.get('/:id', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-});
+})
 
 module.exports = router;

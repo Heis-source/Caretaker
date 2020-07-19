@@ -3,8 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
 var app = express();
+const server = require('http').Server(app);
 
 const mongooseConnection = require('./lib/connectMongo');
 
@@ -40,6 +40,27 @@ const jwtAuth = require('./lib/jwtAuth');
 app.use('/api/ads', require('./router/api/ads'));
 app.use('/api/users', require('./router/api/users'));
 app.use('/api/comment', require('./router/api/comment'));
+
+
+// Añadimos WebSockets
+const io = require('socket.io')(server);
+
+// Ante cada conexion...
+io.on('connection', socket => {
+    // Socket es una conexion con un browser
+    console.log('Nueva conexion de un cliente');
+
+    socket.on('nuevo-mensaje', data => {
+        console.log('Recibido', data);
+
+        // Emito a todos los browsers que esten conectados
+        io.emit('nuevo-mensaje', data);
+    });
+
+    setInterval(() => {
+        socket.emit('pasa-segundo');
+    }, 1000);
+});
 
 //app.use('/',      require('./routes/index'));
 //app.use('/change-locale', require('./routes/change-locale'));

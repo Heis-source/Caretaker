@@ -15,6 +15,8 @@ export default class Login extends Component {
             biography: '',
             photo: '',
             state: '',
+            rating: 0,
+            showemail: true,
             stateArray: [],
             msgFromServer: '',
         };    
@@ -26,9 +28,6 @@ export default class Login extends Component {
                 const stateArray = response.data;
                 this.setState({ stateArray });
             })
-            .catch(error => {
-                console.log("error");
-            })
     }
 
     inputChange = (evt) => {
@@ -39,7 +38,7 @@ export default class Login extends Component {
         })
     }
 
-    getRegister = (email, password, username, biography, photo, state) => {
+    getRegister = (email, password, username, biography, photo, state, rating, showemail) => {
         const fd = new FormData();
         fd.append('email', email);
         fd.append('password', password);
@@ -57,7 +56,7 @@ export default class Login extends Component {
                 msgFromServer: response.data.msgFromServer,
             })
         })
-        .catch(error => {
+        .catch(() => {
             this.setState({
                 msgFromServer: 'generic error',
             })

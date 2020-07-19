@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const commentSchema = require('../../models/comment');
+const commentForUserSchema = require('../../models/commentforUsers');
 
 router.post('/add', async (req, res, next) => {
     try {

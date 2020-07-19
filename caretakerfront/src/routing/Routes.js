@@ -10,6 +10,7 @@ import Details from "../_jsx/ads/details"
 import Profile from "../_jsx/profile/profile"
 import RememberPassword from "../_jsx/recovery/rememberPassword"
 import ResetPassword from "../_jsx/recovery/resetPassword"
+import Delete from "../_jsx/delete/delete"
 import axios from 'axios';
 
 
@@ -29,7 +30,7 @@ export default class Home extends Component {
         super(props)
         this.state = {
             user: [],
-            loggedIn: true,
+            loggedIn: false,
         };
     }
 
@@ -45,34 +46,45 @@ export default class Home extends Component {
             })
             .then(response => {
                 const user = response.data.result;
-                if (!user) {
-                    this.setState({ loggedIn: true });               
+                if (user) {
+                    this.setState({ user, loggedIn: true });               
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 this.setState({ loggedIn: false }); 
             })
         }
     }
 
+
     render() {
+        const renderNavBar = <Navbar className="menu" collapseOnSelect expand="lg">
+            <StyledLink to="/">Caretaker</StyledLink>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="mr-auto"></Nav>
+                    <Nav>
+                        <StyledLink to="/">Ads</StyledLink>
+                        {this.state.loggedIn === false && (
+                            <StyledLink to="/login">Register</StyledLink>
+                        )}
+                        {this.state.loggedIn === false && (
+                            <StyledLink to="/logon">Sign in</StyledLink>
+                        )}
+                        {this.state.loggedIn === true && (
+                            <StyledLink to ="/profile">Welcome {this.state.user.username}</StyledLink>
+                        )}
+                        {this.state.loggedIn === true && (
+                            <StyledLink to ="/logout">Log out</StyledLink>                       )}
+                    </Nav>
+            </Navbar.Collapse>
+        </Navbar>
         return (
-            <Router>       
-                <Navbar className="menu" collapseOnSelect expand="lg">
-                    <StyledLink to="/">Caretaker</StyledLink>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                        <Navbar.Collapse id="responsive-navbar-nav">
-                            <Nav className="mr-auto"></Nav>
-                            <Nav>
-                                <StyledLink to="/">Ads</StyledLink>
-                                <StyledLink to="/login">Register</StyledLink>
-                                <StyledLink to="/logon">Sign in</StyledLink>
-                                <StyledLink to ="/profile">My Account</StyledLink>
-                            </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
+            <Router>
+                {renderNavBar}
                 <Switch>
                     <Route path="/login" component={Login} />
+                    <Route path="/delete" component={Delete} />
                     <Route path="/logon" component={Logon} />
                     <Route path="/createAd" component={CreateAd} />
                     <Route path="/rememberPassword" component={RememberPassword} />
