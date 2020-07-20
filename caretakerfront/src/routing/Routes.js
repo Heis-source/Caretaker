@@ -56,7 +56,6 @@ export default class Home extends Component {
         }
     }
 
-
     render() {
         const renderNavBar = <Navbar className="menu" collapseOnSelect expand="lg">
             <StyledLink to="/">Caretaker</StyledLink>
@@ -72,10 +71,11 @@ export default class Home extends Component {
                             <StyledLink to="/logon">Sign in</StyledLink>
                         )}
                         {this.state.loggedIn === true && (
-                            <StyledLink to ="/profile">Welcome {this.state.user.username}</StyledLink>
+                            <StyledLink to="/profile">Welcome {this.state.user.username}</StyledLink>
                         )}
                         {this.state.loggedIn === true && (
-                            <StyledLink to ="/logout">Log out</StyledLink>                       )}
+                            <StyledLink to ="/logout">Log out</StyledLink>
+                        )}
                     </Nav>
             </Navbar.Collapse>
         </Navbar>
@@ -88,6 +88,7 @@ export default class Home extends Component {
                     <Route path="/logon" component={Logon} />
                     <Route path="/createAd" component={CreateAd} />
                     <Route path="/rememberPassword" component={RememberPassword} />
+                    <Route path="/profile/:username" component={Profile} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/reset/:token" component={ResetPassword} />
                     <Route path="/details/:id" component={Details} />

@@ -10,26 +10,34 @@ export default class Profile extends Component {
             user: [],
             ads: [],
             commentForUsers: [],
+            itsMe: false,
         };
     }
 
     componentDidMount = () => {
-        const token = localStorage.getItem('token');
-        this.logOn(token);
+        this.logOn();
     }
 
-    logOn = (token) => {
-        axios.post('http://localhost:9000/api/users/session' , {
-            token
-        })
-        .then(response => {
-            const user = response.data.result;
-            this.setState({ user });
-            this.loadAds(this.state.user.username);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    logOn = () => {
+        if (this.props.match.params.username) {
+            axios.post('http://localhost:9000/api/users/usernameAds' , {
+                username: this.props.match.params.username
+            })
+            .then(response => {
+                const user = response.data.result;
+                this.setState({ user });
+                this.loadAds(this.state.user.username);
+            })
+        } else {
+            axios.post('http://localhost:9000/api/users/session' , {
+                token: localStorage.getItem('token')
+            })
+            .then(response => {
+                const user = response.data.result;
+                this.setState({ user });
+                this.loadAds(this.state.user.username);
+            })
+        }
     }
 
     loadAds = () => {
@@ -40,30 +48,10 @@ export default class Profile extends Component {
             const ads = response.data.result;
             this.setState({ ads });
         })
-        .catch(error => {
-            console.log(error);
-        })
-    }
-
-    onSubmit = (evt) => {
-        evt.preventDefault();
-    }
-
-    onChangeInput = (evt) => {
-        let inputValue = evt.target.value;
-        let inputName = evt.target.name;
-        this.setState({ [inputName]: inputValue});
-    }
-
-    changeRenders = (evt) => {
-        evt.preventDefault();
-        document.getElementById("photo").setAttribute("disabled", false);
-        document.getElementById("password").setAttribute("disabled", false);
-        document.getElementById("biography").setAttribute("disabled", false);
-        document.getElementById("states").setAttribute("disabled", false);
     }
 
     render() {
+        console.log(this.state.itsMe)
         const { ads } = this.state
         const renderAds = ads.map((c) =>
             <Link to={`/details/${c._id}`} key={c._id}>
@@ -77,7 +65,7 @@ export default class Profile extends Component {
                         <small className="text-muted">Location: {c.provincia}</small>
                     </div>
                 </div>
-            </Link>    
+            </Link>
         )
         return (
             <div className="container">
@@ -122,15 +110,19 @@ export default class Profile extends Component {
                                 <li className="media">
                                     <span className="w-25 text-black font-weight-normal">Rating: </span>
                                     <label className="media-body">{this.state.user.rating}/5</label>
-                                </li>                                
-                                <li className="media">
-                                    <div className="btn-group btn-block" role="group">
-                                        <button type="button" className="btn btn-success active">Chat with {this.state.user.username}</button>
-                                        <button type="button" className="btn btn-warning active">Report</button>
-                                    </div>
                                 </li>
                                 <li className="media">
-                                <Link to="/delete" className="btn btn-danger btn-block delete-btn active">Delete account {this.state.user.username}</Link>
+                                    {this.state.itsMe === true && (
+                                        <div className="btn-group btn-block" role="group">
+                                            <button type="button" className="btn btn-success active">Chat with {this.state.user.username}</button>
+                                            <button type="button" className="btn btn-warning active">Report</button>
+                                        </div>
+                                    )}
+                                </li>
+                                <li className="media">
+                                    {this.state.itsMe === true && (
+                                        <Link to="/delete" className="btn btn-danger btn-block delete-btn active">Delete account {this.state.user.username}</Link>  
+                                    )}
                                 </li>
                             </ul>
                         </div>
@@ -140,13 +132,18 @@ export default class Profile extends Component {
                         <p>{this.state.user.biography}</p>
                         <h4 className="my-3">Opinions about {this.state.user.username}</h4>
                         <div className="list-group">
-                            <a href="#" className="list-group-item list-group-item-action">
-                                <div className="d-flex w-100 justify-content-between">
-                                    <h6 className="mb-1 text-center">We dont have any review to show</h6>
-                                </div>
-                            </a>
+                            <div className="d-flex w-100 justify-content-between list-group-item list-group-item-action">
+                                <h6 className="mb-1 text-center">We dont have any review to show</h6>
+                            </div>
                         </div>
                         <h4 className="my-3">My Ads</h4>
+                            {this.state.ads.length === 0 && (
+                                <div className="list-group">
+                                    <div className="d-flex w-100 justify-content-between list-group-item list-group-item-action">
+                                        <h6 className="mb-1 text-center">Ooops! Nothing to show here!</h6>
+                                    </div>
+                                </div>
+                            )}
                         <div className="card-group">
                             {renderAds}
                         </div>

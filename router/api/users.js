@@ -159,7 +159,8 @@ router.get('/reset', (req, res, next) => {
         resetPasswordExpire: { 
           $gt: Date.now(),
       },
-    }).then(user => {
+    })
+    .then(user => {
       if (user == null) {
         res.json('password reset link invalid or has expired')
       } else {
@@ -217,7 +218,7 @@ router.post('/usernameAds', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+})
 
 router.post('/deleteuser', async (req, res, next) => {
   try {
@@ -236,6 +237,6 @@ router.post('/deleteuser', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+})
 
 module.exports = router;

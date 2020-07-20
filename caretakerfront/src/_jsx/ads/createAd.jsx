@@ -20,9 +20,10 @@ export default class createAd extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount = (prevState) => {
         const token = localStorage.getItem('token');
         this.logOn(token);
+        console.log(prevState)
     }
 
     logOn = (token) => {
@@ -32,7 +33,6 @@ export default class createAd extends Component {
         .then(response => {
             const user = response.data.result;
             this.setState({ user });
-            console.log(response.data)
         })
         .catch(() => {
             this.props.history.push('/ads');

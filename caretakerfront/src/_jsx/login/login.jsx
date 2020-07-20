@@ -66,7 +66,7 @@ export default class Login extends Component {
     onSubmit = (evt) => {
         evt.preventDefault();
         const imgaux = document.getElementById('photo').files[0];
-        this.getRegister(this.state.email, this.state.password, this.state.username, this.state.biography, imgaux, this.state.state);
+        this.getRegister(this.state.email, this.state.password, this.state.username, this.state.biography, imgaux, this.state.rating, this.state.showemail, this.state.state);
     }
 
     render() {
