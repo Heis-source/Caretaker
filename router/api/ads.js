@@ -87,18 +87,14 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
 router.post('/updateAd', upload.single('photo'), async (req, res, next) => {
     try {
 
-        if (req.file.filename === 'undefined') {
-            req.file.filename = req.body.photo
+        if (req.file) {
+            req.body.photo = req.file.filename;
         }
 
-        console.log(req.body.photo)
-        req.file.filename = req.body.photo
-        console.log(req.file.filename)
-        req.body.photo = req.file.filename;
+
         req.body.thumb = req.body.photo;
 
         const adsGetData = req.body;
-        console.log(adsGetData)
         const Ads = await adsSchema.findOne({ _id: adsGetData._id })
 
         if (Ads) {

@@ -53,7 +53,7 @@ export default class Ads extends Component {
         const renderAds = data.map((d) =>
             <div className="product mx-auto" key={d._id}>
                 <div className="img-container">
-                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?dpr=1&auto=compress,format&fit=crop&w=1400&h=&q=80&cs=tinysrgb&crop=" />
+                    <img src={`../../../public/img/ads/thumb/${d.thumb}`} />
                 </div>
                 <div className="product-info">
                     <div className="product-content">

@@ -71,8 +71,7 @@ export default class createAd extends Component {
     
     onSubmit = (evt) => {
         evt.preventDefault();
-        let imgaux = document.getElementById('photo').files[`${this.state.photo}`];
-        console.log(imgaux)
+        let imgaux = document.getElementById('photo').files[0];
         this.adsSaveData(this.state._id, this.state.name, this.state.user.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.updateAt);
     }
 
