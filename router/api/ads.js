@@ -84,6 +84,43 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
     }
 })
 
+router.post('/updateAd', upload.single('photo'), async (req, res, next) => {
+    try {
+
+        if (req.file.filename === 'undefined') {
+            req.file.filename = req.body.photo
+        }
+
+        console.log(req.body.photo)
+        req.file.filename = req.body.photo
+        console.log(req.file.filename)
+        req.body.photo = req.file.filename;
+        req.body.thumb = req.body.photo;
+
+        const adsGetData = req.body;
+        console.log(adsGetData)
+        const Ads = await adsSchema.findOne({ _id: adsGetData._id })
+
+        if (Ads) {
+            adsSchema.updateOne({ _id: adsGetData._id }, { $set: { name: adsGetData.name, where: adsGetData.where, description: adsGetData.description, sell: adsGetData.sell, price: adsGetData.price, photo: adsGetData.photo, provincia: adsGetData.province, updateAd: adsGetData.updateAd }
+            })
+            .then(() => {
+              res.status(200).send({ message: 'ad updated' });
+            })
+        }
+        
+        const requester = new cote.Requester({ name: 'ThumbCrafterAds' });
+        
+        requester.send({
+          type: 'Resize IMG',
+          file: req.body.photo,
+        })
+        
+        } catch (err) {
+            next(err);
+    }
+})
+
 router.post('/getads', async (req, res, next) => {
     try {
   
@@ -100,6 +137,23 @@ router.post('/getads', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res, next) => {
+    try {
+        const _id = req.params.id;
+
+        const ad = await adsSchema.findOne({ _id });
+        if (!ad) {
+            const err = new Error('not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.json({ result: ad });
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+router.get('/edit/:id', async (req, res, next) => {
     try {
         const _id = req.params.id;
 

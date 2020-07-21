@@ -6,6 +6,7 @@ import Login from "../_jsx/login/login";
 import Logon from "../_jsx/logon/logon";
 import Ads from "../_jsx/ads/ads";
 import CreateAd from "../_jsx/ads/createAd"
+import EditAd from "../_jsx/ads/editAds"
 import Details from "../_jsx/ads/details"
 import Profile from "../_jsx/profile/profile"
 import RememberPassword from "../_jsx/recovery/rememberPassword"
@@ -31,29 +32,30 @@ export default class Home extends Component {
         this.state = {
             user: [],
             loggedIn: false,
-        };
+            token: '',
+        }
     }
 
     componentDidMount() {
+        const token = localStorage.getItem('token') 
         const now = new Date().getTime();
-        const token = localStorage.getItem('token');
-
         if (now-token > 24*60*60*1000) {
             localStorage.clear()
         } else {
-            axios.post('http://localhost:9000/api/users/session' , {
-                token
-            })
-            .then(response => {
-                const user = response.data.result;
-                if (user) {
-                    this.setState({ user, loggedIn: true });               
-                }
-            })
-            .catch(() => {
-                this.setState({ loggedIn: false }); 
-            })
+            this.logOn(token)
         }
+    }
+
+    logOn(token) {
+        axios.post('http://localhost:9000/api/users/session' , {
+            token
+        })
+        .then(response => {
+            const user = response.data.result;
+            if (user) {
+                this.setState({ user, loggedIn: true });
+            }
+        })
     }
 
     render() {
@@ -74,7 +76,7 @@ export default class Home extends Component {
                             <StyledLink to="/profile">Welcome {this.state.user.username}</StyledLink>
                         )}
                         {this.state.loggedIn === true && (
-                            <StyledLink to ="/logout">Log out</StyledLink>
+                            <StyledLink to="/logout">Logout</StyledLink>
                         )}
                     </Nav>
             </Navbar.Collapse>
@@ -92,6 +94,7 @@ export default class Home extends Component {
                     <Route path="/profile" component={Profile} />
                     <Route path="/reset/:token" component={ResetPassword} />
                     <Route path="/details/:id" component={Details} />
+                    <Route path="/edit/:id" component={EditAd} />
                     <Route path="/" component={Ads} />
                 </Switch>    
             </Router>

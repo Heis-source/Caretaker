@@ -11,16 +11,7 @@ export default class RememberPasswords extends Component {
         };    
     }
 
-    inputChange = (evt) => {
-        const name = evt.target.name;
-        const value = evt.target.value;
-        this.setState({
-            [name]: value
-        })
-    }
-
     sendEmail = (email) => {
-        // eslint-disable-next-line no-undef
         axios.post('http://localhost:9000/api/users/passwordForgot' , {
             email,
        })
@@ -36,9 +27,19 @@ export default class RememberPasswords extends Component {
             }
         }) 
         .catch(error => {
-            console.log(error.data)
+            this.setState({
+                msgFromServer: ''
+            })
         })
     }   
+
+    inputChange = (evt) => {
+        const name = evt.target.name;
+        const value = evt.target.value;
+        this.setState({
+            [name]: value
+        })
+    }
 
     onSubmit = (evt) => {
         evt.preventDefault();

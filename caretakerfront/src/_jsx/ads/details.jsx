@@ -137,7 +137,7 @@ export default class Details extends Component {
         return (
             <div className="container">
                 <h1 className="my-4">{this.state.data.name}
-                    <small> by: <Link to={`/profile/${this.state.user.username}`}>{this.state.user.username}</Link></small>
+                    <small> by: <Link to={`/profile/${this.state.user.username}`}>{this.state.user.username}</Link></small> <Link to={`/edit/${this.state.data._id}`}><button className="btn-group-sm">Edit</button></Link>
                 </h1>
                 <div className="row">
                     <div className="col-md-8">

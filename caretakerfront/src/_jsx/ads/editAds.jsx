@@ -8,24 +8,22 @@ export default class createAd extends Component {
         super(props)
         this.state = {
             user: [],
+            _id: this.props.match.params.id,
             name: '',
             where: true,
             description: '',
             sell: true,
             price: '',
             photo: '',
-            provincia: 'Albacete',
-            createdAt: new Date(),
+            provincia: '',
+            updateAt: new Date(),
             msgFromServer: '',
         };
     }
 
     componentDidMount = () => {
+        this.search(this.props.match.params.id);
         const token = localStorage.getItem('token');
-        this.logOn(token);
-    }
-
-    logOn = (token) => {
         axios.post('http://localhost:9000/api/users/session' , {
             token
         })
@@ -38,8 +36,17 @@ export default class createAd extends Component {
         })
     }
 
-    adsSaveData = (name, username, where, description, sell, price, photo, provincia, createdAt) => {
+    search = (id) => {
+        axios.get('http://localhost:9000/api/ads/edit/' + id)
+        .then(response => {
+            const data = response.data.result;
+            this.setState({ _id: data._id, name: data.name, where: data.where, description: data.description, sell: data.sell, photo: data.photo, price: data.price, provincia: data.provincia});
+        })
+    }
+
+    adsSaveData = (_id, name, username, where, description, sell, price, photo, provincia, updateAt) => {
         const fd = new FormData();
+        fd.append('_id', _id);
         fd.append('name', name);
         fd.append('username', username);
         fd.append('where', where);
@@ -48,26 +55,25 @@ export default class createAd extends Component {
         fd.append('price', price);
         fd.append('photo', photo);
         fd.append('provincia', provincia);
-        fd.append('updateAt', createdAt);
-        fd.append('createdAt', createdAt);
+        fd.append('updateAt', updateAt);
         axios({
-            method: 'POST',
-            url: 'http://localhost:9000/api/ads',
+            method: 'post',
+            url: 'http://localhost:9000/api/ads/updateAd',
             data: fd,
         })
-        .then(respone => {
-            const msgFromServer = respone.data.msgFromServer
-            this.setState({ msgFromServer })
+        .then(response => {
+            
         })
         .catch(() => {
-            this.setState({ msgFromServer: 'ad error' })
+            this.setState({ msgFromServer: 'ad edit error' })
         })
     }
     
     onSubmit = (evt) => {
         evt.preventDefault();
-        const imgaux = document.getElementById('photo').files[0];
-        this.adsSaveData(this.state.name, this.state.user.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.createdAt);
+        let imgaux = document.getElementById('photo').files[`${this.state.photo}`];
+        console.log(imgaux)
+        this.adsSaveData(this.state._id, this.state.name, this.state.user.username, this.state.where, this.state.description, this.state.sell, this.state.price, imgaux, this.state.provincia, this.state.updateAt);
     }
 
     onChangeInput = (evt) => {
@@ -79,14 +85,9 @@ export default class createAd extends Component {
     render() {
         return(
             <div className="container">
-                {this.state.msgFromServer === 'ad created' && (
-                    <div className="alert alert-success" role="alert">
-                        Ad created, create more or use the following link to <Link to='/ads'>go ads</Link>
-                    </div>
-                )}
-                {this.state.msgFromServer === 'ad error' && (
+                {this.state.msgFromServer === 'ad edit error' && (
                     <div className="alert alert-danger" role="alert">
-                        Something is wrong! Try again or contact with Caretaker admin!
+                        Something is wrong on edit! Try again or contact with Caretaker admin!
                     </div>
                 )}
                 <form onSubmit={this.onSubmit} encType="multipart/form-data">
@@ -126,7 +127,8 @@ export default class createAd extends Component {
                         <label htmlFor="photo">Photo</label>
                         <input type="file" name='photo' className="form-control-file" id="photo" />
                     </div>
-                    <button type="submit" className="btn btn-primary">Create</button>
+                    <button type="submit" className="btn btn-primary">Edit</button>
+                    <Link to={`/details/${this.state._id}`}><button className="btn btn-danger">Back</button></Link>
                 </form>
             </div>
         )

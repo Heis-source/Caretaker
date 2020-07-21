@@ -22,7 +22,9 @@ export default class Ads extends Component {
 
     componentDidMount = () => {
         const token = localStorage.getItem('token');
-        this.logOn(token);
+        axios.post('http://localhost:9000/api/users/session' , {
+            token
+        })
     }
 
     search = () => {
@@ -33,25 +35,11 @@ export default class Ads extends Component {
             this.setState({ limit: data.length });
         })
     }
-
-    logOn = (token) => {
-        axios.post('http://localhost:9000/api/users/session' , {
-            token
-        })
-        .then(response => {
-            const user = response.data.result;
-            this.setState({ loggedIn: true });
-        })
-        .catch(() => {
-            this.setState({ loggedIn: false });
-        })
-    }
     
     onSubmit = (evt) => {
         evt.preventDefault();
         const finalURL = makingURL([this.state.name], [this.state.sell], [this.state.pricemin], [this.state.pricemax], [this.state.state]);
         this.search(finalURL);
-        console.log(finalURL)
     }
 
     onChangeInput = (evt) => {

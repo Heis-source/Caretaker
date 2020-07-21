@@ -186,7 +186,7 @@ router.post('/updatePassword', async (req, res, next) => {
     const User = await userSchema.findOne({ email: email })
 
     if (User) {
-        userSchema.updateOne({ email: email }, { $set: { password: password, resetPasswordToken: null, resetPasswordExpire: null }
+      userSchema.updateOne({ email: email }, { $set: { password: password, resetPasswordToken: null, resetPasswordExpire: null }
       })
       .then(() => {
         res.status(200).send({ message: 'password updated' });
