@@ -38,7 +38,6 @@ router.get('/search', async (req, res, next) => {
     const filter = {};
 
     filter.ad_Id = ad_Id;
-    console.log(filter.ad_Id)
 
     const Comment = await commentSchema.list(filter, limit, sort);
 

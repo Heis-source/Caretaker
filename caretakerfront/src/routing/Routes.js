@@ -14,7 +14,6 @@ import ResetPassword from "../_jsx/recovery/resetPassword"
 import Delete from "../_jsx/delete/delete"
 import axios from 'axios';
 
-
 const StyledLink = styled(Link)`
     color: palevioletred;
 	font-size: 1.25em;
@@ -58,6 +57,10 @@ export default class Home extends Component {
         })
     }
 
+    handleLogout = () => {
+        localStorage.clear();
+    }
+
     render() {
         const renderNavBar = <Navbar className="menu" collapseOnSelect expand="lg">
             <StyledLink to="/">Caretaker</StyledLink>
@@ -76,7 +79,7 @@ export default class Home extends Component {
                             <StyledLink to="/profile">Welcome {this.state.user.username}</StyledLink>
                         )}
                         {this.state.loggedIn === true && (
-                            <StyledLink to="/logout">Logout</StyledLink>
+                            <StyledLink to="/logout" onClick={this.handleLogout}>Logout</StyledLink>
                         )}
                     </Nav>
             </Navbar.Collapse>

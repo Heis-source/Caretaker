@@ -17,6 +17,9 @@ require('dotenv').config();
 router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
 
+    req.body.photo = req.file.filename;
+    req.body.thumb = req.body.photo;
+    
     const userGetData = req.body;
     const userSaveData = new userSchema(userGetData);
 

@@ -5,7 +5,7 @@ body{
 
 .card-group {
     overflow: auto;
-    height: 13%;
+    height: 20%;
     display: block;
 }
 

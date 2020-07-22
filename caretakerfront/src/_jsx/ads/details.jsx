@@ -32,11 +32,11 @@ export default class Details extends Component {
             this.searchUserInfo(this.state.data.username)
             this.searchAdsInfo(this.state.data.username)
             this.whoIam();
-            this.loadCommnets();
+            this.loadComments();
         })
     }
     
-    loadCommnets = () => {
+    loadComments = () => {
         axios.get('http://localhost:9000/api/comment/search?ad_Id=' + this.state.ad_Id + "&limit=4")
         .then(response => {
             const comment = response.data.result;
@@ -55,18 +55,6 @@ export default class Details extends Component {
         })
     }
 
-    searchUserInfo = (username) => {
-        axios.post('http://localhost:9000/api/users/usernameAds' , {
-            username
-        })
-        .then(response => {
-            const user = response.data.result;
-            if (user) {
-               this.setState({ user });
-            }
-        })
-    }
-
     searchAdsInfo = (username) => {
         axios.get('http://localhost:9000/api/ads/?username='+ username +'&limit=4')
         .then(response => {
@@ -75,12 +63,33 @@ export default class Details extends Component {
                this.setState({ ads, msgFromServerAds: 'no ads found' });
             }
         })
-        .catch(error => {
+        .catch(() => {
             this.setState({
                 msgFromServerAds: 'no ads found',
             })
         })
     }
+
+    sendEmailForBooking = () => {
+        axios.post('http://localhost:9000/api/booking' , {
+            Busername: this.state.userForComments,
+            _id: this.state.ad_Id,
+       })
+        .then(response => {
+            if (response.data === 'Email is not in database') {
+                this.setState({
+                    msgFromServer: ''
+                })
+            } else if (response.data === 'Recovery email sent') {
+                this.setState({
+                    msgFromServer: 'Email was send',
+                })
+            }
+        }) 
+        .catch(error => {
+            console.log(error.data)
+        })
+    }  
 
     searchUserInfo = (username) => {
         axios.post('http://localhost:9000/api/users/usernameAds' , {
@@ -181,6 +190,7 @@ export default class Details extends Component {
                             <textarea className="form-control" placeholder='Send some review' id="addingComment" name="addingComment" rows="3" onChange={this.inputChange}></textarea>
                         </div>
                         <button type="submit" className="btn btn-primary">Send review</button>
+                        <div className="btn btn-success" onClick={this.sendEmailForBooking}>Send booking Email</div>
                     </form>
                 </div>
                 <h3 className="my-4">Related Ads</h3>

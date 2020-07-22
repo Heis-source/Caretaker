@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
         const price = req.query.price;
         const sell = req.query.sell;
         const where = req.query.where;
-        const limit = parseInt(req.query.limit);
+        const limit = parseInt(req.query.limit || 10);
         const start = parseInt(req.query.start || 0);
         const sort = req.query.sort || '_id';
 

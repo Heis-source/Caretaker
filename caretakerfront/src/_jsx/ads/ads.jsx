@@ -25,6 +25,10 @@ export default class Ads extends Component {
         axios.post('http://localhost:9000/api/users/session' , {
             token
         })
+        .then(response => {
+            const user = response.data;
+            this.setState({ loggedIn: true });
+        })
     }
 
     search = () => {
@@ -53,7 +57,7 @@ export default class Ads extends Component {
         const renderAds = data.map((d) =>
             <div className="product mx-auto" key={d._id}>
                 <div className="img-container">
-                    <img src={`../../../public/img/ads/thumb/${d.thumb}`} />
+                    <img src={`http://localhost:9000/public/img/ads/thumb/${d.thumb}`} />
                 </div>
                 <div className="product-info">
                     <div className="product-content">
